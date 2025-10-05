@@ -78,7 +78,7 @@ export default function SignInDialog({ open, onClose, onSuccess }: Props) {
             <Box component="span" sx={{ display: "block", width: 32, height: 32, bgcolor: "transparent" }} />
           </Avatar>
           <Typography variant="h5" component="h1" sx={{ fontWeight: 700 }}>
-            Sign in
+            Sign innnnnnn
           </Typography>
         </Box>
 

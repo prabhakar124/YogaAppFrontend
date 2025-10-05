@@ -20,6 +20,7 @@ import ForgotPassword from "../utils/ForgotPassword";
 import AppTheme from "../shared-theme/AppTheme";
 import ColorModeSelect from "../shared-theme/ColorModeSelect";
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from "../utils/CustomIcons";
+import { useAuth } from "../context/AuthContext";
 
 /*
   This SignIn component supports two modes:
@@ -77,14 +78,22 @@ const SignInContainer = styled(Stack, {
 export default function SignIn(props: SignInProps) {
   const { onSuccess, compact } = props;
 
+   // Auth hook from context
+  const { signin } = useAuth();
+
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState("");
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
+  // loading state while calling signin
+  const [submitting, setSubmitting] = React.useState(false);
+
   // local submit handler now triggers onSuccess on success:
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    
+    
     event.preventDefault();
 
     // local validation
@@ -96,25 +105,26 @@ export default function SignIn(props: SignInProps) {
     const password = data.get("password") as string;
 
     try {
-      // TODO: replace with real backend call & error handling
-      // Example:
-      // const res = await fetch('/api/auth/login', { method: 'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password}) })
-      // const json = await res.json();
-
-      // demo: pretend it succeeded
-      const success = true;
-
-      if (success) {
-        if (typeof onSuccess === "function") {
-          onSuccess();
-        }
-      } else {
-        // set appropriate errors
+      setSubmitting(true);
+      // call the signin from AuthContext
+      const result = await signin(email, password);
+      if (!result.ok) {
+        // show server message as a password error (or adjust as needed)
         setPasswordError(true);
-        setPasswordErrorMessage("Invalid credentials");
+        setPasswordErrorMessage(result.message || "Invalid credentials");
+        return;
+      }
+       // success: close dialog or do callback
+      if (typeof onSuccess === "function") {
+        onSuccess();
       }
     } catch (err) {
       console.error("Sign in error", err);
+      setPasswordError(true);
+      setPasswordErrorMessage("Something went wrong. Try again.");
+    }
+     finally {
+      setSubmitting(false);
     }
   };
 

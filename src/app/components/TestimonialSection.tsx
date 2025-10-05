@@ -11,7 +11,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Rating from "@mui/material/Rating";
 import Image from "next/image";
-
+import avatar1 from "../../../public/profile.png"
+import avatar2 from "../../../public/human.png"
 // Swiper
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
@@ -30,7 +31,7 @@ import "swiper/css/navigation";
 const testimonials = [
   {
     id: 1,
-    avatar: "/avatar1.jpg",
+    avatar: avatar1,
     quote:
       "YogKulam is one of the best institutes to learn yoga for professional practice. Staff is very well behaved, organised and always ready to help — learning is easy and fun.",
     name: "UTKARSHA SINGH",
@@ -39,7 +40,7 @@ const testimonials = [
   },
   {
     id: 2,
-    avatar: "/avatar2.jpg",
+    avatar: avatar2,
     quote:
       "I am doing the PGDYT course from YogKulam. All the teachers here make us understand every subject very well. Teachers cover topics completely and clear all the doubts.",
     name: "NEETU MEHTO",
@@ -48,7 +49,7 @@ const testimonials = [
   },
   {
     id: 3,
-    avatar: "/avatar3.jpg",
+    avatar: avatar1,
     quote:
       "Got to learn and understand a lot by joining YogKulam. My physical, mental and social health has become full of positive energy thanks to the gurus’ guidance.",
     name: "DR. KAUSHALYA",
@@ -57,7 +58,7 @@ const testimonials = [
   },
   {
     id: 4,
-    avatar: "/avatar4.jpg",
+    avatar: avatar2,
     quote:
       "Excellent support and resources — recorded lectures and study materials helped me revise at my own pace. The student community is very encouraging.",
     name: "SONIA VERMA",
@@ -66,7 +67,7 @@ const testimonials = [
   },
   {
     id: 5,
-    avatar: "/avatar5.jpg",
+    avatar: avatar1,
     quote:
       "Friendly teachers and thorough lessons. The practical sessions built my confidence to teach and the course was well organized.",
     name: "RAHUL KUMAR",
@@ -75,7 +76,7 @@ const testimonials = [
   },
   {
     id: 6,
-    avatar: "/avatar6.jpg",
+    avatar: avatar2,
     quote:
       "The instructors are knowledgeable and very supportive. This course truly transformed my understanding of yoga practice and teaching.",
     name: "PRIYA SINGH",
