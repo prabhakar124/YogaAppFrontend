@@ -7,17 +7,25 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import Banner_1 from "../../../public/Yoga1.jpg";
-import Banner_2 from "../../../public/Yoga1.jpg";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Banner_1 from "../../../public/profile.png";
+import Banner_2 from "../../../public/human.png";
 
 const slides = [
-  { id: 1, src: Banner_1, alt: "Slide 1" },
-  { id: 2, src: Banner_2, alt: "Slide 2" },
+  { id: 1, src: Banner_1, alt: "Yoga Training Institute" },
+  { id: 2, src: Banner_2, alt: "Professional Yoga Training" },
+];
+
+const highlights = [
+  "500+ satisfied students",
+  "Experienced and dedicated yoga teachers",
+  "Best Yoga-ed-tech Experience & Support",
+  "Career support for yoga professionals",
 ];
 
 export default function BannerCarousel() {
   return (
-    <Box sx={{ width: "100%", mt: 4 }}>
+    <Box sx={{ width: "100%", mt: { xs: 2, md: 4 } }}>
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
         slidesPerView={1}
@@ -32,262 +40,234 @@ export default function BannerCarousel() {
               sx={{
                 position: "relative",
                 width: "100%",
-                minHeight: { xs: 520, md: 500 },
-                borderRadius: 2,
+                minHeight: { xs: "auto", sm: 450, md: 550 },
+                borderRadius: { xs: 0, md: 2 },
                 overflow: "hidden",
-                // main warm gradient background
-                background:
-                  "linear-gradient(180deg, rgba(84,30,2,0.95) 0%, rgba(216,67,21,0.95) 35%, rgba(244,162,97,1) 100%)",
+                background: "linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)",
               }}
             >
-              {/* subtle right diagonal highlight */}
-              <Box
-                sx={{
-                  position: "absolute",
-                  right: "-10%",
-                  top: "-10%",
-                  width: "70%",
-                  height: "120%",
-                  background:
-                    "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.06), rgba(255,255,255,0) 40%)",
-                  transform: "rotate(-12deg)",
-                  pointerEvents: "none",
-                }}
-              />
-
-              {/* Since 2012 vertical text */}
-              <Box
-                sx={{
-                  position: "absolute",
-                  left: 16,
-                  top: "50%",
-                  transform: "translateY(-50%) rotate(-90deg)",
-                  color: "rgba(255,255,255,0.18)",
-                  fontSize: "0.8rem",
-                  fontWeight: 700,
-                  letterSpacing: 2,
-                  zIndex: 3,
-                }}
-              >
-                SINCE 2012
-              </Box>
-
               <Container
-                maxWidth="xl"
+                maxWidth="lg"
                 sx={{
                   position: "relative",
-                  zIndex: 4,
+                  zIndex: 2,
                   height: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  py: { xs: 4, md: 6 },
-                  gap: 4,
+                  py: { xs: 6, sm: 8, md: 10 },
                 }}
               >
-                {/* Left content */}
                 <Box
                   sx={{
-                    width: { xs: "100%", md: "60%" },
-                    color: "common.white",
-                    pr: { xs: 0, md: 4 },
+                    display: "flex",
+                    flexDirection: { xs: "column", md: "row" },
+                    alignItems: "center",
+                    gap: { xs: 4, md: 6 },
                   }}
                 >
-                  <Typography
-                    component="h1"
-                    sx={{
-                      fontSize: { xs: "2rem", md: "3.8rem" },
-                      fontWeight: 800,
-                      lineHeight: 1.05,
-                      color: "#fff",
-                      mb: 2,
-                      textShadow: "0 4px 18px rgba(0,0,0,0.25)",
-                    }}
-                  >
-                    Best Yoga Training{" "}
-                    <Box component="span" sx={{ display: "inline-block" }}>
-                      (YTT) Institute In Jaipur
-                    </Box>
-                  </Typography>
-
-                  <Typography
-                    sx={{
-                      fontSize: { xs: "0.95rem", md: "1.05rem" },
-                      fontWeight: 500,
-                      color: "rgba(255,255,255,0.9)",
-                      mb: 3,
-                    }}
-                  >
-                    Transform your Yoga Passion into Profession
-                  </Typography>
-
-                 
-
-                  {/* Stats */}
-                  <Box sx={{ mt: 3, mb: 4 }}>
-                    {[
-                      "500+ satisfied students",
-                      "Experienced and dedicated yoga teachers",
-                      "Best Yoga-ed-tech Experience & Support",
-                      "Career support for yoga professionals",
-                    ].map((s, i) => (
-                      <Box
-                        key={i}
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                          alignItems: "flex-start",
-                          mb: 1.2,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            width: 10,
-                            height: 10,
-                            backgroundColor: "#FFCC02",
-                            borderRadius: "50%",
-                            mt: "6px",
-                            boxShadow: "0 1px 4px rgba(0,0,0,0.2)",
-                            flexShrink: 0,
-                          }}
-                        />
-                        <Typography
-                          sx={{
-                            color: "rgba(255,255,255,0.95)",
-                            fontWeight: 500,
-                            fontSize: "0.95rem",
-                          }}
-                        >
-                          {s}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-
-                  {/* Course icon rows (small) */}
+                  {/* Left Content */}
                   <Box
                     sx={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: 2,
-                      alignItems: "center",
-                      mb: { xs: 6, md: 2 },
+                      flex: 1,
+                      color: "white",
+                      textAlign: { xs: "center", md: "left" },
                     }}
                   >
-                    {/* simplified small icons — you can expand */}
-                    {[
-                      "Advance Diploma",
-                      "PG Diploma",
-                      "Diploma",
-                      "Certificate",
-                      "Certificate Pranayama",
-                      "Foundation Course",
-                      "RYT (Yoga Alliance)",
-                    ].map((txt, idx) => (
-                      <Box
-                        key={idx}
+                    {/* Badge */}
+                    <Box
+                      sx={{
+                        display: "inline-block",
+                        bgcolor: "rgba(255,255,255,0.2)",
+                        backdropFilter: "blur(10px)",
+                        px: 2,
+                        py: 0.5,
+                        borderRadius: 3,
+                        mb: 2,
+                      }}
+                    >
+                      <Typography
                         sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          minWidth: 140,
+                          fontSize: "0.75rem",
+                          fontWeight: 600,
+                          letterSpacing: 1,
+                          color: "white",
                         }}
                       >
+                        SINCE 2012
+                      </Typography>
+                    </Box>
+
+                    {/* Main Heading */}
+                    <Typography
+                      component="h1"
+                      sx={{
+                        fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
+                        fontWeight: 800,
+                        lineHeight: 1.1,
+                        color: "white",
+                        mb: 2,
+                        textShadow: "0 2px 20px rgba(0,0,0,0.2)",
+                      }}
+                    >
+                      Best Yoga Training Institute In Jaipur
+                    </Typography>
+
+                    {/* Subtitle */}
+                    <Typography
+                      sx={{
+                        fontSize: { xs: "1rem", md: "1.25rem" },
+                        fontWeight: 500,
+                        color: "rgba(255,255,255,0.95)",
+                        mb: 4,
+                        maxWidth: 600,
+                        mx: { xs: "auto", md: 0 },
+                      }}
+                    >
+                      Transform your Yoga Passion into Profession
+                    </Typography>
+
+                    {/* Highlights */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1.5,
+                        mb: 4,
+                        alignItems: { xs: "center", md: "flex-start" },
+                      }}
+                    >
+                      {highlights.map((highlight, index) => (
                         <Box
+                          key={index}
                           sx={{
-                            width: 46,
-                            height: 46,
-                            borderRadius: "50%",
-                            background: "#FFF3E0",
-                            border: "3px solid #FFCC02",
                             display: "flex",
                             alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 18,
-                            color: "#D84315",
-                            boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
+                            gap: 1.5,
                           }}
                         >
-                          🧘
+                          <CheckCircleIcon
+                            sx={{
+                              fontSize: 20,
+                              color: "#ffd54f",
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontSize: { xs: "0.875rem", md: "1rem" },
+                              color: "rgba(255,255,255,0.95)",
+                              fontWeight: 500,
+                            }}
+                          >
+                            {highlight}
+                          </Typography>
                         </Box>
-                        <Typography
-                          sx={{
-                            fontSize: "0.72rem",
-                            fontWeight: 700,
-                            color: "rgba(255,255,255,0.9)",
-                          }}
-                        >
-                          {txt}
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
+                      ))}
+                    </Box>
 
-                {/* Right content: circular image */}
-                <Box
-                  sx={{
-                    width: { xs: "100%", md: "40%" },
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: { xs: "center", md: "flex-end" },
-                    position: "relative",
-                    pr: { md: 6 },
-                  }}
-                >
+                    {/* CTA Button */}
+                    <Button
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        bgcolor: "white",
+                        color: "#d84315",
+                        px: 4,
+                        py: 1.5,
+                        fontSize: "1rem",
+                        fontWeight: 700,
+                        borderRadius: 2,
+                        textTransform: "none",
+                        boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+                        "&:hover": {
+                          bgcolor: "#fafafa",
+                          transform: "translateY(-2px)",
+                          boxShadow: "0 12px 32px rgba(0,0,0,0.3)",
+                        },
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      Start Your Journey →
+                    </Button>
+                  </Box>
+
+                  {/* Right Content - Image */}
                   <Box
                     sx={{
-                      width: { xs: 220, md: 420 },
-                      height: { xs: 220, md: 420 },
-                      borderRadius: "50%",
-                      overflow: "hidden",
-                      border: "6px solid rgba(255,255,255,0.9)",
-                      boxShadow: "0 12px 30px rgba(0,0,0,0.35)",
-                      background: "#fff",
+                      flex: { xs: "none", md: 1 },
+                      width: { xs: "100%", sm: "80%", md: "auto" },
+                      maxWidth: { xs: 400, md: 500 },
+                      position: "relative",
+                      display: { xs: "none", sm: "block" },
                     }}
                   >
-                    {/* use next/image for optimization */}
-                    <Image
-                      src={slide.src}
-                      alt={slide.alt}
-                      sizes="(max-width: 900px) 220px, 420px"
-                      style={{ objectFit: "cover", width: "100%", height: "100%" }}
-                    />
+                    <Box
+                      sx={{
+                        position: "relative",
+                        width: "100%",
+                        paddingBottom: "100%",
+                        borderRadius: 3,
+                        overflow: "hidden",
+                        boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
+                        border: "8px solid rgba(255,255,255,0.2)",
+                      }}
+                    >
+                      <Image
+                        src={slide.src}
+                        alt={slide.alt}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                        }}
+                        sizes="(max-width: 768px) 80vw, 500px"
+                        priority
+                      />
+                    </Box>
                   </Box>
                 </Box>
               </Container>
 
-              {/* Apply button center-bottom */}
+              {/* Decorative Elements */}
               <Box
                 sx={{
                   position: "absolute",
-                  bottom: 28,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  zIndex: 5,
+                  top: -100,
+                  right: -100,
+                  width: 400,
+                  height: 400,
+                  borderRadius: "50%",
+                  background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%)",
+                  pointerEvents: "none",
                 }}
-              >
-                <Button
-                  variant="contained"
-                  size="large"
-                  sx={{
-                    backgroundColor: "#7B1F0F",
-                    color: "#fff",
-                    px: 4,
-                    py: 1.3,
-                    fontSize: "1rem",
-                    fontWeight: 600,
-                    borderRadius: 2,
-                    boxShadow: "0 8px 18px rgba(0,0,0,0.3)",
-                    "&:hover": { backgroundColor: "#5A140A" },
-                  }}
-                >
-                  Start your Yogkulam Journey →
-                </Button>
-              </Box>
+              />
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: -50,
+                  left: -50,
+                  width: 300,
+                  height: 300,
+                  borderRadius: "50%",
+                  background: "radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%)",
+                  pointerEvents: "none",
+                }}
+              />
             </Box>
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Custom Pagination Styling */}
+      <style jsx global>{`
+        .swiper-pagination-bullet {
+          width: 12px;
+          height: 12px;
+          background: rgba(255, 255, 255, 0.5);
+          opacity: 1;
+        }
+        .swiper-pagination-bullet-active {
+          background: white;
+          width: 32px;
+          border-radius: 6px;
+        }
+      `}</style>
     </Box>
   );
 }

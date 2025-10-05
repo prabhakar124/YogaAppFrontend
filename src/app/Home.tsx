@@ -1,69 +1,56 @@
-// src/app/components/Home.tsx
+// src/app/Home.tsx
 "use client";
 
-import BannerCarousel from "../app/components/BannerCarousel";
-import TrainerInfo from "../app/components/Trainer&InstituteInfo";
-import WhatWeOffer from "../app/components/WhatWeOffer";
-import TestimonialSection from "../app/components/TestimonialSection";
-import Footer from "../app/components/Footer";
-import Navbar from "./components/Navbar"; // Optional: Add navbar
 import React from "react";
-import AuthModal from "./components/AuthModal";
 import { useAuth } from "./context/AuthContext";
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+
+import Navbar from "./components/Navbar";
+import AuthModal from "./components/AuthModal";
+import WelcomeBanner from "./components/WelcomeBanner";
+import BannerCarousel from "./components/BannerCarousel";
+import TrainerInfo from "./components/Trainer&InstituteInfo";
+import WhatWeOffer from "./components/WhatWeOffer";
+import TestimonialSection from "./components/TestimonialSection";
+import Footer from "./components/Footer";
 
 export default function Home() {
     const [open, setOpen] = React.useState<boolean>(false);
     const { user, loading } = useAuth();
 
-    // Open dialog on mount only if user is not logged in
     React.useEffect(() => {
         if (!loading && !user) {
-            setOpen(true);
+            const timer = setTimeout(() => {
+                setOpen(true);
+            }, 2000);
+            return () => clearTimeout(timer);
         }
     }, [loading, user]);
 
     return (
-        <div className="min-h-screen">
-            {/* Optional: Add Navbar */}
+        <Box sx={{ minHeight: '100vh' }}>
             <Navbar />
+            <Toolbar />
 
-            {/* Auth Modal - replaces Material-UI Dialog */}
             <AuthModal
                 isOpen={open}
                 onClose={() => setOpen(false)}
                 defaultView="signin"
             />
 
-            {/* Welcome Banner for Logged-in Users */}
             {user && !loading && (
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white py-4 px-6">
-                    <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div>
-                            <p className="text-lg font-semibold">
-                                Welcome back, {user.name || user.email}! 🙏
-                            </p>
-                            <p className="text-sm opacity-90">
-                                Continue your yoga journey with us
-                            </p>
-                        </div>
-                        <div className="flex gap-3">
-                            <button
-                                onClick={() => setOpen(true)}
-                                className="bg-white text-orange-600 px-4 py-2 rounded-lg font-medium hover:bg-orange-50 transition-colors"
-                            >
-                                My Dashboard
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                <WelcomeBanner 
+                    userName={user.name || 'Student'}
+                    onDashboardClick={() => setOpen(true)}
+                />
             )}
 
-            {/* Existing page sections */}
             <BannerCarousel />
             <TrainerInfo />
             <WhatWeOffer />
             <TestimonialSection />
             <Footer />
-        </div>
+        </Box>
     );
 }
