@@ -1,119 +1,79 @@
-"use client"
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
+// src/app/components/Home.tsx
+"use client";
+
+import BannerCarousel from "./BannerCarousel";
+import TrainerInfo from "./Trainer&InstituteInfo";
+import WhatWeOffer from "./WhatWeOffer";
+import TestimonialSection from "./TestimonialSection";
+import Footer from "./Footer";
+import Navbar from "./Navbar";
+import React from "react";
+import AuthModal from "./AuthModal";
+import { useAuth } from "../context/AuthContext";
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Image from "next/image";
-import Logo from "../../../public/Logo.png"
-import dynamic from "next/dynamic";
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Toolbar from '@mui/material/Toolbar';
 
+export default function Home() {
+    const [open, setOpen] = React.useState<boolean>(false);
+    const { user, loading } = useAuth();
 
-interface Props {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * You won't need it on your project.
-     */
-    window?: () => Window;
-}
-
-
-const drawerWidth = 240;
-const navItems = ['Home', 'Membership', 'About', 'Contact', 'Signup'];
-
-export default function Navbar(props: Props) {
-    const { window } = props;
-    const [mobileOpen, setMobileOpen] = React.useState(false);
-
-    const handleDrawerToggle = () => {
-        setMobileOpen((prevState) => !prevState);
-    };
-
-    const drawer = (
-        <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ my: 2 }}>
-                MUI
-            </Typography>
-            <Divider />
-            <List>
-                {navItems.map((item) => (
-                    <ListItem key={item} disablePadding>
-                        <ListItemButton sx={{ textAlign: 'center' }}>
-                            <ListItemText primary={item} />
-                        </ListItemButton>
-                    </ListItem>
-                ))}
-            </List>
-
-        </Box>
-    );
-
-    const container = window !== undefined ? () => window().document.body : undefined;
+    // Open dialog on mount only if user is not logged in
+    React.useEffect(() => {
+        if (!loading && !user) {
+            // Optional: Auto-open modal after a delay
+            const timer = setTimeout(() => {
+                setOpen(true);
+            }, 2000); // Opens after 2 seconds
+            return () => clearTimeout(timer);
+        }
+    }, [loading, user]);
 
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar component="nav" color='default' sx={{ bgcolor: '#284258ff' }}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+        <Box sx={{ minHeight: '100vh' }}>
+            {/* Navbar */}
+            <Navbar />
 
-                    {/* Logo (use next/image with explicit width & height) */}
-                    <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
-                        <Image src={Logo} alt="Logo" width={56} height={56} />
-                        {/* optionally add a title next to logo */}
-                        <Typography variant="h6" sx={{ ml: 1, color: "#cbc5c5ff", display: { xs: "none", sm: "block" } }}>
-                            Yog Kulam
-                        </Typography>
-                    </Box>
-                    {/* spacer pushes the nav items (and other icons) to the right */}
-                    <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item) => (
-                            <Button key={item} sx={{ color: '#cbc5c5ff' }}>
-                                {item}
-                            </Button>
-                        ))}
-                    </Box>
-                </Toolbar>
-            </AppBar>
-            <nav>
-                <Drawer
-                    container={container}
-                    variant="temporary"
-                    open={mobileOpen}
-                    onClose={handleDrawerToggle}
-                    ModalProps={{
-                        keepMounted: true, // Better open performance on mobile.
-                    }}
-                    sx={{
-                        display: { xs: 'block', sm: 'none' },
-                        '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                    }}
-                >
-                    {drawer}
-                </Drawer>
-            </nav>
+            {/* Spacer for fixed AppBar */}
+            <Toolbar />
 
-           
+            {/* Auth Modal */}
+            <AuthModal
+                isOpen={open}
+                onClose={() => setOpen(false)}
+                defaultView="signin"
+            />
+
+            {/* Welcome Banner for Logged-in Users */}
+            {user && !loading && (
+                <Box sx={{ bgcolor: '#ff6b35', py: 2 }}>
+                    <Container maxWidth="lg">
+                        <Alert 
+                            severity="success" 
+                            sx={{ 
+                                bgcolor: 'rgba(255, 255, 255, 0.9)',
+                                '& .MuiAlert-icon': {
+                                    color: '#ff6b35'
+                                }
+                            }}
+                        >
+                            <AlertTitle sx={{ fontWeight: 600 }}>
+                                Welcome back, {user.name || user.email}! 🙏
+                            </AlertTitle>
+                            Continue your yoga journey with us. Ready to practice?
+                        </Alert>
+                    </Container>
+                </Box>
+            )}
+
+            {/* Existing page sections */}
+            <BannerCarousel />
+            <TrainerInfo />
+            <WhatWeOffer />
+            <TestimonialSection />
+            <Footer />
         </Box>
     );
 }
