@@ -23,6 +23,7 @@ import Tooltip from '@mui/material/Tooltip';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
+import { useRouter } from 'next/navigation';
 
 // Import auth components
 import { useAuth } from '../context/AuthContext';
@@ -33,7 +34,7 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = ['Home', 'Membership', 'About', 'Contact'];
+const navItems = ['Home', 'Blog', 'Membership', 'About', 'Contact'];
 
 export default function Navbar(props: Props) {
     const { window } = props;
@@ -41,6 +42,7 @@ export default function Navbar(props: Props) {
     const [showAuthModal, setShowAuthModal] = React.useState(false);
     const [authView, setAuthView] = React.useState<"signin" | "signup">("signin");
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+    const router = useRouter();
 
     // Get auth state
     const { user, loading, signout } = useAuth();
@@ -139,11 +141,11 @@ export default function Navbar(props: Props) {
                         {/* Logo */}
                         <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
                             <Image src={Logo} alt="Logo" width={56} height={56} />
-                            <Typography 
-                                variant="h6" 
-                                sx={{ 
-                                    ml: 1, 
-                                    color: "#cbc5c5ff", 
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    ml: 1,
+                                    color: "#cbc5c5ff",
                                     display: { xs: "none", sm: "block" },
                                     fontWeight: 600
                                 }}
@@ -158,9 +160,10 @@ export default function Navbar(props: Props) {
                         {/* Desktop Navigation */}
                         <Box sx={{ display: { xs: 'none', sm: 'flex' }, alignItems: 'center', gap: 1 }}>
                             {navItems.map((item) => (
-                                <Button 
-                                    key={item} 
-                                    sx={{ 
+                                <Button
+                                    key={item}
+                                    onClick={() => item === 'Blog' ? router.push('/blog') : null}
+                                    sx={{
                                         color: '#cbc5c5ff',
                                         '&:hover': {
                                             bgcolor: 'rgba(255, 255, 255, 0.1)'
@@ -179,8 +182,8 @@ export default function Navbar(props: Props) {
                                 <Box sx={{ ml: 2 }}>
                                     <Tooltip title="Account settings">
                                         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                            <Avatar 
-                                                sx={{ 
+                                            <Avatar
+                                                sx={{
                                                     bgcolor: '#ff6b35',
                                                     width: 40,
                                                     height: 40

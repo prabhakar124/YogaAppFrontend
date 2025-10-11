@@ -168,7 +168,7 @@ export default function BannerCarousel() {
                       size="large"
                       sx={{
                         bgcolor: "white",
-                        color: "#d84315",
+                        color: "#255aa8ff",
                         px: 4,
                         py: 1.5,
                         fontSize: "1rem",
@@ -188,7 +188,7 @@ export default function BannerCarousel() {
                     </Button>
                   </Box>
 
-                  {/* Right Content - Image */}
+                  {/* Right Content - Image (Circular) */}
                   <Box
                     sx={{
                       flex: { xs: "none", md: 1 },
@@ -203,7 +203,7 @@ export default function BannerCarousel() {
                         position: "relative",
                         width: "100%",
                         paddingBottom: "100%",
-                        borderRadius: 3,
+                        borderRadius: "50%",
                         overflow: "hidden",
                         boxShadow: "0 20px 60px rgba(0,0,0,0.3)",
                         border: "8px solid rgba(255,255,255,0.2)",
