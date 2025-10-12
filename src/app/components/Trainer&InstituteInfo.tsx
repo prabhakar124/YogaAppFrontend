@@ -80,7 +80,7 @@ export default function TrainerInfo() {
     <>
       {/* ABOUT HERO */}
       <Box component="section" sx={{ py: { xs: 6, md: 5 }, bgcolor: "background.paper" }}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           {/* Header */}
           <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
             <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
@@ -118,7 +118,7 @@ export default function TrainerInfo() {
           {/* Content grid */}
           <Grid container spacing={4} alignItems="center">
             {/* Left: text */}
-            <Grid size={{ xs: 12, md: 7 }}>
+            <Grid size={{ xs: 12, md: 8 }}>
               <Box sx={{ pr: { md: 5 } }}>
                 {/* IMPORTANT: the small decorative box inside the paragraph must render inline.
                     We use component="span" for both Boxes to avoid <div> inside <p>. */}
@@ -173,7 +173,7 @@ export default function TrainerInfo() {
             </Grid>
 
             {/* Right: image */}
-            <Grid size={{ xs: 12, md: 5 }}>
+            <Grid size={{ xs: 12, md: 4 }}>
               <Box sx={{ display: "flex", justifyContent: { xs: "center", md: "flex-end" }, alignItems: "center" }}>
                 <Box
                   sx={{
@@ -218,7 +218,7 @@ export default function TrainerInfo() {
                   minHeight: { xs: 160, md: 200 },
                   borderRadius: 2,
                   background:
-                    "linear-gradient(180deg, rgba(97,180,179,0.98) 0%, rgba(96,183,183,0.95) 100%)",
+                    "linear-gradient(180deg, rgba(63, 91, 107, 0.98) 0%, rgba(91, 115, 178, 0.95) 100%)",
                   color: "common.white",
                   display: "flex",
                   flexDirection: "column",
@@ -262,7 +262,7 @@ export default function TrainerInfo() {
 
       {/* Feature list two-column cards */}
       <Box component="section" sx={{ py: { xs: 6, md: 4 }, bgcolor: "background.paper" }}>
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
           {/* Header */}
           <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>

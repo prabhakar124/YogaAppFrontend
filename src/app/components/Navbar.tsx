@@ -26,7 +26,7 @@ import LoginIcon from '@mui/icons-material/Login';
 import { useRouter } from 'next/navigation';
 
 // Import auth components
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import AuthModal from './AuthModal';
 
 interface Props {

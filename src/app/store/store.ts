@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import authReducer from './slices/authSlice'; 
 import blogReducer from './slices/blogSlice';
 import courseReducer from './slices/courseSlice';
 import cartReducer from './slices/cartSlice';
@@ -8,6 +9,7 @@ import uiReducer from './slices/uiSlice';
 
 export const store = configureStore({
   reducer: {
+    auth: authReducer, // ✅ Add this
     blog: blogReducer,
     course: courseReducer,
     cart: cartReducer,

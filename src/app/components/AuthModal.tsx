@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useAuth } from "@/app/context/AuthContext";
+import { useAuth } from "@/app/hooks/useAuth";
 
 type AuthView = 
   | "signin" 

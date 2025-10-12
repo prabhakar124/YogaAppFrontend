@@ -100,7 +100,7 @@ export default function TestimonialSection(): JSX.Element {
 
   return (
     <Box component="section" sx={{ py: { xs: 6, md: 10 }, bgcolor: "background.paper" }}>
-      <Container maxWidth="lg">
+      <Container maxWidth="xl">
         {/* Header */}
         <Box sx={{ textAlign: "center", mb: { xs: 3, md: 5 } }}>
           <Typography
