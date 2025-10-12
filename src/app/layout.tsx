@@ -4,7 +4,7 @@ import "./globals.css";
 import ThemeRegistry from './ThemeRegistry';
 import { ReduxProvider } from './store/ReduxProvider';
 import AuthInitializer from './components/AuthInitializer'; 
-
+import ThemeInitializer from './components/ThemeInitializer'; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +33,8 @@ export default function RootLayout({
       >
         <ReduxProvider>
           <ThemeRegistry>
-            <AuthInitializer /> {/* ✅ Add this */}
+            <AuthInitializer /> 
+            <ThemeInitializer />
             {children}
           </ThemeRegistry>
         </ReduxProvider>

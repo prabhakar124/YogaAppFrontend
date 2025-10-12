@@ -28,6 +28,7 @@ import { useRouter } from 'next/navigation';
 // Import auth components
 import { useAuth } from '../hooks/useAuth';
 import AuthModal from './AuthModal';
+import ThemeToggle from './ThemeToggle'; // ✅ Import theme toggle
 
 interface Props {
     window?: () => Window;
@@ -78,6 +79,13 @@ export default function Navbar(props: Props) {
                 </Typography>
             </Box>
             <Divider />
+            <ListItem>
+            <ListItemButton sx={{ justifyContent: 'center' }}>
+                <ThemeToggle />
+                <Typography sx={{ ml: 1 }}>Toggle Theme</Typography>
+            </ListItemButton>
+        </ListItem>
+        <Divider />
             <List>
                 {navItems.map((item) => (
                     <ListItem key={item} disablePadding>
@@ -126,14 +134,21 @@ export default function Navbar(props: Props) {
         <>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBar component="nav" color='default' sx={{ bgcolor: '#284258ff' }}>
+                <AppBar 
+                    component="nav" 
+                    color='default' 
+                    sx={{ 
+                        bgcolor: 'primary.main', // ✅ Use theme color
+                        backgroundImage: 'none',
+                    }}
+                >
                     <Toolbar>
                         <IconButton
                             color="inherit"
                             aria-label="open drawer"
                             edge="start"
                             onClick={handleDrawerToggle}
-                            sx={{ mr: 2, display: { sm: 'none' }, color: '#cbc5c5ff' }}
+                            sx={{ mr: 2, display: { sm: 'none' }, color: 'white' }}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -145,7 +160,7 @@ export default function Navbar(props: Props) {
                                 variant="h6"
                                 sx={{
                                     ml: 1,
-                                    color: "#cbc5c5ff",
+                                    color: "white",
                                     display: { xs: "none", sm: "block" },
                                     fontWeight: 600
                                 }}
@@ -164,7 +179,7 @@ export default function Navbar(props: Props) {
                                     key={item}
                                     onClick={() => item === 'Blog' ? router.push('/blog') : null}
                                     sx={{
-                                        color: '#cbc5c5ff',
+                                        color: 'white',
                                         '&:hover': {
                                             bgcolor: 'rgba(255, 255, 255, 0.1)'
                                         }
@@ -173,6 +188,9 @@ export default function Navbar(props: Props) {
                                     {item}
                                 </Button>
                             ))}
+
+                            {/* ✅ Add Theme Toggle */}
+                            <ThemeToggle />
 
                             {/* Auth Buttons/User Menu */}
                             {loading ? (
@@ -238,10 +256,10 @@ export default function Navbar(props: Props) {
                                         onClick={() => handleOpenAuth("signin")}
                                         startIcon={<LoginIcon />}
                                         sx={{
-                                            color: '#cbc5c5ff',
-                                            borderColor: '#cbc5c5ff',
+                                            color: 'white',
+                                            borderColor: 'white',
                                             '&:hover': {
-                                                borderColor: '#fff',
+                                                borderColor: 'white',
                                                 bgcolor: 'rgba(255, 255, 255, 0.1)'
                                             }
                                         }}
@@ -252,9 +270,10 @@ export default function Navbar(props: Props) {
                                         variant="contained"
                                         onClick={() => handleOpenAuth("signup")}
                                         sx={{
-                                            bgcolor: '#ff6b35',
+                                            bgcolor: 'white',
+                                            color: 'primary.main',
                                             '&:hover': {
-                                                bgcolor: '#ff5722'
+                                                bgcolor: 'rgba(255, 255, 255, 0.9)'
                                             }
                                         }}
                                     >

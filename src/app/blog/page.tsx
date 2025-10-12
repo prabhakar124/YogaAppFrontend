@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Box,
   Container,
@@ -25,67 +25,37 @@ import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// Blog data type
-export type BlogPost = {
-  id: string;
-  slug: string;
-  category: string;
-  categoryColor: string;
-  title: string;
-  excerpt: string;
-  author: string;
-  date: string;
-  readTime: string;
-  image: string;
-  tableOfContents: string[];
-};
+// ✅ Import Redux hooks and actions
+import { useAppSelector, useAppDispatch } from "../store/hooks";
+import {
+  fetchBlogs,
+  setCategory,
+  setSortBy,
+  setSearchQuery,
+} from "../store/slices/blogSlice";
 
 const categories = ["All Blogs", "YTT", "Disease Cure", "Asanas", "Pranayam", "Philosophy", "Meditation"];
 
 export default function BlogPage() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All Blogs");
-  const [sortBy, setSortBy] = useState("latest");
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
 
-  // Fetch blogs from API
+  // ✅ Get state from Redux
+  const { posts, loading, error, filters } = useAppSelector((state) => state.blog);
+  const { category: selectedCategory, sortBy, searchQuery } = filters;
+
+  // ✅ Fetch blogs when component mounts or filters change
   useEffect(() => {
-    fetchBlogs();
-  }, [selectedCategory, sortBy]);
+    dispatch(fetchBlogs({
+      category: selectedCategory,
+      page: 1,
+      per_page: 100,
+    }));
+  }, [dispatch, selectedCategory]);
 
-  const fetchBlogs = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const params = new URLSearchParams({
-        page: '1',
-        per_page: '100',
-        ...(selectedCategory !== 'All Blogs' && { category: selectedCategory })
-      });
-      
-      const response = await fetch(`http://localhost:4000/api/blogs?${params}`);
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch blogs');
-      }
-      
-      const data = await response.json();
-      setBlogPosts(data.blogs);
-    } catch (error) {
-      console.error('Error fetching blogs:', error);
-      setError('Failed to load blogs. Please try again later.');
-      setBlogPosts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Filter and search logic
+  // Filter and sort logic (client-side)
   const filteredPosts = useMemo(() => {
-    let filtered = blogPosts;
+    let filtered = [...posts];
 
     // Filter by search query
     if (searchQuery.trim()) {
@@ -98,32 +68,44 @@ export default function BlogPage() {
       );
     }
 
-    // Sort (since API already returns latest first, we only need to handle other sorts)
+    // Sort
     if (sortBy === "popular") {
-      // For now, just reverse the order as a placeholder
-      // In production, you'd have a popularity metric from the API
       filtered = [...filtered].reverse();
     } else if (sortBy === "trending") {
-      // Similar placeholder - would use actual trending data from API
       filtered = [...filtered];
     }
 
     return filtered;
-  }, [searchQuery, blogPosts, sortBy]);
+  }, [posts, searchQuery, sortBy]);
 
   const handleBlogClick = (blogSlug: string) => {
     router.push(`/blog/${blogSlug}`);
   };
 
+  const handleCategoryChange = (category: string) => {
+    dispatch(setCategory(category));
+  };
+
+  const handleSortChange = (sort: string) => {
+    dispatch(setSortBy(sort));
+  };
+
+  const handleSearchChange = (query: string) => {
+    dispatch(setSearchQuery(query));
+  };
+
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+    <Box sx={{ minHeight: "100vh" }}>
       <Navbar />
       <Toolbar />
 
       {/* Hero Header */}
       <Box
         sx={{
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: (theme) =>
+            theme.palette.mode === 'dark'
+              ? 'linear-gradient(135deg, #4c5fd5 0%, #5a3880 100%)'
+              : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           color: "white",
           py: { xs: 6, md: 8 },
           textAlign: "center",
@@ -156,12 +138,16 @@ export default function BlogPage() {
       {/* Category Navigation Bar */}
       <Box
         sx={{
-          bgcolor: "white",
-          borderBottom: "1px solid #e0e0e0",
+          bgcolor: 'background.paper', // ✅ Use theme color
+          borderBottom: "1px solid",
+          borderColor: 'divider', // ✅ Use theme color
           position: "sticky",
           top: 64,
           zIndex: 10,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+          boxShadow: (theme) =>
+            theme.palette.mode === 'dark'
+              ? '0 2px 8px rgba(255,255,255,0.05)'
+              : '0 2px 8px rgba(0,0,0,0.05)',
         }}
       >
         <Container maxWidth="lg">
@@ -181,7 +167,7 @@ export default function BlogPage() {
             {categories.map((category) => (
               <Button
                 key={category}
-                onClick={() => setSelectedCategory(category)}
+                onClick={() => handleCategoryChange(category)}
                 sx={{
                   px: 3,
                   py: 1,
@@ -217,7 +203,7 @@ export default function BlogPage() {
           <TextField
             placeholder="🔍 Search articles..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => handleSearchChange(e.target.value)}
             sx={{
               flex: 1,
               minWidth: 250,
@@ -237,21 +223,21 @@ export default function BlogPage() {
           />
           <Button
             variant={sortBy === "latest" ? "contained" : "outlined"}
-            onClick={() => setSortBy("latest")}
+            onClick={() => handleSortChange("latest")}
             sx={{ borderRadius: 2, textTransform: "none" }}
           >
             Latest
           </Button>
           <Button
             variant={sortBy === "popular" ? "contained" : "outlined"}
-            onClick={() => setSortBy("popular")}
+            onClick={() => handleSortChange("popular")}
             sx={{ borderRadius: 2, textTransform: "none" }}
           >
             Popular
           </Button>
           <Button
             variant={sortBy === "trending" ? "contained" : "outlined"}
-            onClick={() => setSortBy("trending")}
+            onClick={() => handleSortChange("trending")}
             sx={{ borderRadius: 2, textTransform: "none" }}
           >
             Trending
@@ -271,7 +257,11 @@ export default function BlogPage() {
             <Typography variant="h6" color="error" gutterBottom>
               {error}
             </Typography>
-            <Button variant="contained" onClick={fetchBlogs} sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              onClick={() => dispatch(fetchBlogs({ category: selectedCategory }))}
+              sx={{ mt: 2 }}
+            >
               Try Again
             </Button>
           </Box>

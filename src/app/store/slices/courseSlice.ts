@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { courseAPI } from '@/app/services/api';
 
 interface Course {
   id: string;
@@ -10,6 +11,7 @@ interface Course {
 
 interface CourseState {
   courses: Course[];
+  currentCourse: Course | null;
   enrolledCourses: Course[];
   loading: boolean;
   error: string | null;
@@ -17,44 +19,100 @@ interface CourseState {
 
 const initialState: CourseState = {
   courses: [],
+  currentCourse: null,
   enrolledCourses: [],
   loading: false,
   error: null,
 };
 
-export const fetchCourses = createAsyncThunk('course/fetchCourses', async () => {
-  const response = await fetch('http://localhost:4000/api/courses');
-  return response.json();
-});
+// Async Thunks
+export const fetchCourses = createAsyncThunk(
+  'course/fetchCourses',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await courseAPI.getAll();
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
-export const enrollCourse = createAsyncThunk('course/enroll', async (courseId: string) => {
-  const response = await fetch(`http://localhost:4000/api/courses/${courseId}/enroll`, {
-    method: 'POST',
-    credentials: 'include',
-  });
-  return response.json();
-});
+export const fetchCourseById = createAsyncThunk(
+  'course/fetchById',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await courseAPI.getById(id);
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
+export const enrollCourse = createAsyncThunk(
+  'course/enroll',
+  async (courseId: string, { rejectWithValue }) => {
+    try {
+      return await courseAPI.enroll(courseId);
+    } catch (error: any) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Slice
 const courseSlice = createSlice({
   name: 'course',
   initialState,
-  reducers: {},
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
+    // Fetch courses
     builder
-      .addCase(fetchCourses.pending, (state) => { state.loading = true; })
+      .addCase(fetchCourses.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchCourses.fulfilled, (state, action) => {
         state.loading = false;
         state.courses = action.payload.courses;
       })
       .addCase(fetchCourses.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message || 'Failed';
+        state.error = action.payload as string;
+      });
+
+    // Fetch single course
+    builder
+      .addCase(fetchCourseById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCourseById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.currentCourse = action.payload;
+      })
+      .addCase(fetchCourseById.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    // Enroll course
+    builder
+      .addCase(enrollCourse.pending, (state) => {
+        state.loading = true;
       })
       .addCase(enrollCourse.fulfilled, (state, action) => {
+        state.loading = false;
         state.enrolledCourses.push(action.payload.course);
+      })
+      .addCase(enrollCourse.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
+export const { clearError } = courseSlice.actions;
 export default courseSlice.reducer;
-    

@@ -200,65 +200,69 @@ export default function TrainerInfo() {
       </Box>
 
       {/* Responsive gradient cards row */}
-      <Box
-        component="section"
-        sx={{
-          py: { xs: 4, md: 8 },
-          bgcolor: "transparent",
-          px: { xs: 2, sm: 3, md: 12 }, // responsive horizontal padding (no fixed ml/mr)
-        }}
-      >
-        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
-          {items.map((it) => (
-            <Grid key={it.id} size={{ xs: 12, sm: 6, md: 3 }}>
-              <Card
-                elevation={6}
-                sx={{
-                  height: "100%",
-                  minHeight: { xs: 160, md: 200 },
-                  borderRadius: 2,
-                  background:
-                    "linear-gradient(180deg, rgba(63, 91, 107, 0.98) 0%, rgba(91, 115, 178, 0.95) 100%)",
-                  color: "common.white",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  p: { xs: 2, md: 3 },
-                  overflow: "visible",
-                  transition: "transform .22s ease, box-shadow .22s ease",
-                  "&:hover": {
-                    transform: "translateY(-8px)",
-                    boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
-                  },
-                }}
-              >
-                <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1 }}>
-                  <Avatar
-                    sx={{
-                      bgcolor: "white",
-                      color: "primary.main",
-                      width: { xs: 56, md: 72 },
-                      height: { xs: 56, md: 72 },
-                      boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
-                      fontSize: { xs: 22, md: 30 },
-                    }}
-                  >
-                    {it.icon}
-                  </Avatar>
+    {/* Responsive gradient cards row */}
+<Box
+  component="section"
+  sx={{
+    py: { xs: 4, md: 8 },
+    bgcolor: 'transparent',
+    px: { xs: 2, sm: 3, md: 12 },
+  }}
+>
+  <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+    {items.map((it) => (
+      <Grid key={it.id} size={{ xs: 12, sm: 6, md: 3 }}>
+        <Card
+          elevation={6}
+          sx={{
+            height: "100%",
+            minHeight: { xs: 160, md: 200 },
+            borderRadius: 2,
+            // ✅ Change from hardcoded gradient to theme-aware gradient
+            background: (theme) => 
+              theme.palette.mode === 'dark'
+                ? 'linear-gradient(180deg, rgba(139, 159, 238, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)'
+                : 'linear-gradient(180deg, rgba(63, 91, 107, 0.98) 0%, rgba(91, 115, 178, 0.95) 100%)',
+            color: "common.white", // ✅ Keep white text in both modes
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            p: { xs: 2, md: 3 },
+            overflow: "visible",
+            transition: "transform .22s ease, box-shadow .22s ease",
+            "&:hover": {
+              transform: "translateY(-8px)",
+              boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
+            },
+          }}
+        >
+          <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1 }}>
+            <Avatar
+              sx={{
+                bgcolor: "white",
+                color: "primary.main", // ✅ Use theme color
+                width: { xs: 56, md: 72 },
+                height: { xs: 56, md: 72 },
+                boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+                fontSize: { xs: 22, md: 30 },
+              }}
+            >
+              {it.icon}
+            </Avatar>
 
-                  <Typography variant="h6" component="h3" sx={{ fontWeight: 700, letterSpacing: "-0.02em", fontSize: { xs: "0.95rem", md: "1.15rem" }, color: "#fff", mt: 0.5 }}>
-                    {it.title}
-                  </Typography>
+            <Typography variant="h6" component="h3" sx={{ fontWeight: 700, letterSpacing: "-0.02em", fontSize: { xs: "0.95rem", md: "1.15rem" }, color: "#fff", mt: 0.5 }}>
+              {it.title}
+            </Typography>
 
-                  <Typography sx={{ mt: 0.5, fontSize: { xs: "0.8rem", md: "0.95rem" }, color: "rgba(255,255,255,0.92)", fontWeight: 400, maxWidth: { xs: 260, sm: 320, md: "none" } }}>
-                    {it.subtitle}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
+            <Typography sx={{ mt: 0.5, fontSize: { xs: "0.8rem", md: "0.95rem" }, color: "rgba(255,255,255,0.92)", fontWeight: 400, maxWidth: { xs: 260, sm: 320, md: "none" } }}>
+              {it.subtitle}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    ))}
+  </Grid>
+</Box>
 
       {/* Feature list two-column cards */}
       <Box component="section" sx={{ py: { xs: 6, md: 4 }, bgcolor: "background.paper" }}>

@@ -43,7 +43,10 @@ export default function BannerCarousel() {
                 minHeight: { xs: "auto", sm: 450, md: 550 },
                 borderRadius: { xs: 0, md: 2 },
                 overflow: "hidden",
-                background: "linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)",
+                background: (theme) => 
+      theme.palette.mode === 'dark'
+        ? 'linear-gradient(135deg, #4c5fd5 0%, #3d4ea8 50%, #1a3050 100%)'
+        : 'linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)',
               }}
             >
               <Container

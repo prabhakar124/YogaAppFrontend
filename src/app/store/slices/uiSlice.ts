@@ -9,11 +9,13 @@ interface Notification {
 interface UIState {
   notifications: Notification[];
   loading: boolean;
+  themeMode: 'light' | 'dark'; // ✅ Add this
 }
 
 const initialState: UIState = {
   notifications: [],
   loading: false,
+  themeMode: 'light', // ✅ Default to light mode
 };
 
 const uiSlice = createSlice({
@@ -32,8 +34,40 @@ const uiSlice = createSlice({
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
+    // ✅ Add theme toggle actions
+    setThemeMode: (state, action: PayloadAction<'light' | 'dark'>) => {
+      state.themeMode = action.payload;
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('themeMode', action.payload);
+      }
+    },
+    toggleTheme: (state) => {
+      state.themeMode = state.themeMode === 'light' ? 'dark' : 'light';
+      // Save to localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('themeMode', state.themeMode);
+      }
+    },
+    initializeTheme: (state) => {
+      // Load from localStorage on init
+      if (typeof window !== 'undefined') {
+        const savedTheme = localStorage.getItem('themeMode') as 'light' | 'dark' | null;
+        if (savedTheme) {
+          state.themeMode = savedTheme;
+        }
+      }
+    },
   },
 });
 
-export const { addNotification, removeNotification, setLoading } = uiSlice.actions;
+export const { 
+  addNotification, 
+  removeNotification, 
+  setLoading,
+  setThemeMode, // ✅ Export
+  toggleTheme, // ✅ Export
+  initializeTheme, // ✅ Export
+} = uiSlice.actions;
+
 export default uiSlice.reducer;

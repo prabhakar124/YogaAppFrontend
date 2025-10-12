@@ -44,11 +44,14 @@ export default function Home() {
             {/* ✅ Show a banner prompt instead of forcing a modal */}
             {showLoginPrompt && !user && !loading && (
                 <Container maxWidth="lg" sx={{ mt: 2 }}>
-                    <Paper 
+                    <Paper
                         elevation={3}
-                        sx={{ 
-                            p: 3, 
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        sx={{
+                            p: 3,
+                            background: (theme) =>
+                                theme.palette.mode === 'dark'
+                                    ? 'linear-gradient(135deg, #4c5fd5 0%, #5a3880 100%)'
+                                    : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                             color: 'white',
                             borderRadius: 2,
                             display: 'flex',
@@ -67,10 +70,10 @@ export default function Home() {
                             </Typography>
                         </Box>
                         <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Button 
-                                variant="contained" 
-                                sx={{ 
-                                    bgcolor: 'white', 
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    bgcolor: 'white',
                                     color: '#667eea',
                                     '&:hover': { bgcolor: '#f5f5f5' }
                                 }}
@@ -83,14 +86,14 @@ export default function Home() {
                             >
                                 Sign In
                             </Button>
-                            <Button 
-                                variant="outlined" 
-                                sx={{ 
-                                    borderColor: 'white', 
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    borderColor: 'white',
                                     color: 'white',
-                                    '&:hover': { 
-                                        borderColor: 'white', 
-                                        bgcolor: 'rgba(255,255,255,0.1)' 
+                                    '&:hover': {
+                                        borderColor: 'white',
+                                        bgcolor: 'rgba(255,255,255,0.1)'
                                     }
                                 }}
                                 onClick={() => setShowLoginPrompt(false)}

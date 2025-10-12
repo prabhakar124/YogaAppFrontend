@@ -124,7 +124,7 @@ export default function TestimonialSection(): JSX.Element {
             Here is our community on social media. Keep up with our latest news, events, and ideas! Follow us on social
             media to get regular updates and join our lively community.
           </Typography>
-                    <Divider sx={{ width: 120, height: 2, bgcolor: "text.secondary", mx: "auto", opacity: 0.6, my: 1 }} />
+          <Divider sx={{ width: 120, height: 2, bgcolor: "text.secondary", mx: "auto", opacity: 0.6, my: 1 }} />
 
         </Box>
 
@@ -177,7 +177,7 @@ export default function TestimonialSection(): JSX.Element {
                               sx={{
                                 height: "100%",
                                 border: "1px solid",
-                                borderColor: "divider",
+                                borderColor: "divider", // ✅ Use theme divider
                                 borderRadius: 1,
                                 p: { xs: 2, md: 2.5 },
                                 display: "flex",
@@ -185,7 +185,7 @@ export default function TestimonialSection(): JSX.Element {
                                 alignItems: "center",
                                 textAlign: "center",
                                 position: "relative",
-                                bgcolor: "common.white",
+                                bgcolor: "background.paper", // ✅ Use theme paper color
                               }}
                             >
                               {/* avatar */}
@@ -197,8 +197,9 @@ export default function TestimonialSection(): JSX.Element {
                                   overflow: "hidden",
                                   mb: 1.5,
                                   boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
-                                  border: "3px solid #fff",
-                                  background: "#f5f5f5",
+                                  border: "3px solid",
+                                  borderColor: 'background.paper', // ✅ Use theme color
+                                  background: (theme) => theme.palette.mode === 'dark' ? '#1a1a2e' : '#f5f5f5', // ✅ Theme-aware
                                 }}
                               >
                                 <Image src={t.avatar} alt={t.name} width={84} height={84} style={{ objectFit: "cover" }} />
@@ -209,7 +210,7 @@ export default function TestimonialSection(): JSX.Element {
                                 <Typography
                                   component="p"
                                   sx={{
-                                    color: "text.secondary",
+                                    color: "text.secondary", // ✅ Use theme color
                                     fontSize: { xs: "0.88rem", md: "0.95rem" },
                                     lineHeight: 1.6,
                                     mb: 1.25,
@@ -221,14 +222,19 @@ export default function TestimonialSection(): JSX.Element {
                                 {/* Read more link */}
                                 <Typography
                                   component="div"
-                                  sx={{ color: "primary.main", fontSize: "0.9rem", mb: 1, cursor: "pointer" }}
+                                  sx={{
+                                    color: "primary.main", // ✅ Use theme color
+                                    fontSize: "0.9rem",
+                                    mb: 1,
+                                    cursor: "pointer"
+                                  }}
                                 >
                                   Read More
                                 </Typography>
 
                                 {/* name, location, rating */}
                                 <Box sx={{ mt: 0.5 }}>
-                                  <Typography sx={{ fontWeight: 700 }}>{t.name}</Typography>
+                                  <Typography sx={{ fontWeight: 700, color: 'text.primary' }}>{t.name}</Typography>
                                   <Typography sx={{ fontSize: "0.78rem", color: "text.secondary", mb: 0.75 }}>
                                     {t.location}
                                   </Typography>

@@ -90,7 +90,7 @@ export default function WhatWeOffer() {
                             return (
                                 <Grid
                                     key={it.id}
-                                    size={{ xs: 12,sm: 6, md: 4 }}
+                                    size={{ xs: 12, sm: 6, md: 4 }}
                                     sx={{
                                         display: "flex",          // make the grid item a flex container
                                     }}
@@ -101,12 +101,12 @@ export default function WhatWeOffer() {
                                         sx={{
                                             position: "relative",
                                             borderRadius: 1.25,
-                                            border: "1px dotted rgba(0,0,0,0.18)",
-                                            backgroundColor: "common.white",
-                                            // remove fixed minHeight and let flex sizing control it
+                                            border: "1px dotted",
+                                            borderColor: 'divider', // ✅ Use theme divider color
+                                            backgroundColor: 'background.paper', // ✅ Use theme paper color
                                             display: "flex",
                                             flexDirection: "column",
-                                            flex: 1,                 // <-- key: stretch to fill the grid item's height
+                                            flex: 1,
                                             p: { xs: 2, md: 3 },
                                             overflow: "visible",
                                             transition: "transform .25s ease, box-shadow .25s ease",
@@ -115,7 +115,7 @@ export default function WhatWeOffer() {
                                                 boxShadow: "0 20px 36px rgba(0,0,0,0.14)",
                                             },
                                             "&:hover .corner-badge": {
-                                                bgcolor: "#8b2b10",
+                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#c44a1e' : '#8b2b10', // ✅ Theme-aware
                                             },
                                             "&:hover .corner-badge .corner-icon": {
                                                 transform: "scale(1.08) rotate(12deg)",
@@ -133,7 +133,7 @@ export default function WhatWeOffer() {
                                                 width: 56,
                                                 height: 56,
                                                 borderRadius: "0 12px 0 12px",
-                                                bgcolor: "#B53D19",
+                                                bgcolor: "#B53D19", // Keep this as accent color
                                                 display: "flex",
                                                 alignItems: "center",
                                                 justifyContent: "center",
@@ -163,28 +163,31 @@ export default function WhatWeOffer() {
                                             </Box>
                                         </Box>
 
-                                        {/* make CardContent stretch to push content and keep equal height */}
                                         <CardContent sx={{ p: 0, width: "100%", display: "flex", flexDirection: "column", flex: 1 }}>
-                                            {/* Title */}
                                             <Box>
                                                 <Typography
                                                     component="h3"
-                                                    sx={{ fontSize: { xs: "1.05rem", md: "1.15rem" }, fontWeight: 700, color: "text.primary", mb: 1 }}
+                                                    sx={{
+                                                        fontSize: { xs: "1.05rem", md: "1.15rem" },
+                                                        fontWeight: 700,
+                                                        color: "text.primary", // ✅ Use theme text color
+                                                        mb: 1
+                                                    }}
                                                 >
                                                     {it.title}
                                                 </Typography>
 
-                                                {/* small divider under title */}
-                                                <Box sx={{ width: "100%", borderTop: "1px solid rgba(0,0,0,0.08)", my: 1.5 }} />
+                                                <Box sx={{ width: "100%", borderTop: "1px solid", borderColor: 'divider', my: 1.5 }} />
                                             </Box>
 
-                                            {/* Body - this box will take the remaining vertical space */}
-                                            <Box sx={{ color: "text.secondary", fontSize: { xs: "0.9rem", md: "0.95rem" }, lineHeight: 1.6, mt: 0 }}>
+                                            <Box sx={{
+                                                color: "text.secondary", // ✅ Use theme text color
+                                                fontSize: { xs: "0.9rem", md: "0.95rem" },
+                                                lineHeight: 1.6,
+                                                mt: 0
+                                            }}>
                                                 {it.text}
                                             </Box>
-
-                                            {/* If you want bottom spacing or an action area you can add it here.
-                  Using flex: 1 ensures every card's vertical distribution is consistent. */}
                                         </CardContent>
                                     </Card>
                                 </Grid>

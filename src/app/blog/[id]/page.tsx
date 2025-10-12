@@ -26,38 +26,14 @@ import { useRouter } from "next/navigation";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
-// Types
-interface BlogSection {
-    heading: string;
-    text: string;
-    image?: string;
-    imageAlt?: string;
-}
-
-interface BlogPost {
-    id: string;
-    slug: string;
-    category: string;
-    categoryColor: string;
-    title: string;
-    author: string;
-    date: string;
-    readTime: string;
-    image: string;
-    tableOfContents: string[];
-    content: BlogSection[];
-}
-
-interface RelatedPost {
-    id: string;
-    slug: string;
-    category: string;
-    categoryColor: string;
-    title: string;
-    author: string;
-    readTime: string;
-    image: string;
-}
+// ✅ Import Redux
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import {
+    fetchBlogBySlug,
+    fetchRelatedBlogs,
+    searchBlogs,
+    clearSearchResults,
+} from "../../store/slices/blogSlice";
 
 // Helper function to create URL-friendly IDs from headings
 const createId = (text: string) => {
@@ -69,76 +45,40 @@ const createId = (text: string) => {
 
 export default function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
     const router = useRouter();
+    const dispatch = useAppDispatch();
     const { id } = use(params);
     
-    const [post, setPost] = useState<BlogPost | null>(null);
-    const [loading, setLoading] = useState(true);
+    // ✅ Get state from Redux
+    const { currentPost: post, relatedPosts, searchResults, loading, error } = useAppSelector(
+        (state) => state.blog
+    );
+
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState<RelatedPost[]>([]);
-    const [relatedPosts, setRelatedPosts] = useState<RelatedPost[]>([]);
 
-    // Fetch blog post
+    // ✅ Fetch blog post on mount
     useEffect(() => {
-        const fetchBlogPost = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(`http://localhost:4000/api/blogs/${id}`);
-                if (!response.ok) {
-                    throw new Error('Blog not found');
-                }
-                const data = await response.json();
-                setPost(data);
-                
-                // Fetch related posts
-                if (data.id) {
-                    fetchRelatedPosts(data.id);
-                }
-            } catch (error) {
-                console.error('Error fetching blog post:', error);
-                setPost(null);
-            } finally {
-                setLoading(false);
-            }
-        };
+        dispatch(fetchBlogBySlug(id));
+    }, [dispatch, id]);
 
-        fetchBlogPost();
-    }, [id]);
-
-    // Fetch related posts
-    const fetchRelatedPosts = async (blogId: string) => {
-        try {
-            const response = await fetch(`http://localhost:4000/api/blogs/${blogId}/related?limit=3`);
-            const data = await response.json();
-            setRelatedPosts(data);
-        } catch (error) {
-            console.error('Error fetching related posts:', error);
+    // ✅ Fetch related posts when main post loads
+    useEffect(() => {
+        if (post?.id) {
+            dispatch(fetchRelatedBlogs(post.id));
         }
-    };
+    }, [dispatch, post?.id]);
 
-    // Debounced search functionality
+    // ✅ Debounced search
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
             if (searchQuery.trim()) {
-                searchBlogs(searchQuery);
+                dispatch(searchBlogs(searchQuery));
             } else {
-                setSearchResults([]);
+                dispatch(clearSearchResults());
             }
         }, 300);
 
         return () => clearTimeout(delayDebounceFn);
-    }, [searchQuery]);
-
-    // Search blogs
-    const searchBlogs = async (query: string) => {
-        try {
-            const response = await fetch(`http://localhost:4000/api/blogs?search=${encodeURIComponent(query)}&per_page=5`);
-            const data = await response.json();
-            setSearchResults(data.blogs);
-        } catch (error) {
-            console.error('Error searching blogs:', error);
-            setSearchResults([]);
-        }
-    };
+    }, [searchQuery, dispatch]);
 
     // Handle search input change
     const handleSearchChange = (query: string) => {
@@ -148,7 +88,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
     // Clear search
     const handleClearSearch = () => {
         setSearchQuery("");
-        setSearchResults([]);
+        dispatch(clearSearchResults());
     };
 
     // Smooth scroll function
@@ -174,7 +114,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
     // Not found state
     if (!post) {
         return (
-            <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+            <Box sx={{ minHeight: "100vh" }}>
                 <Navbar />
                 <Toolbar />
                 <Box sx={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 2 }}>
@@ -188,7 +128,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
     }
 
     return (
-        <Box sx={{ minHeight: "100vh", bgcolor: "#f5f5f5" }}>
+        <Box sx={{ minHeight: "100vh" }}>
             <Navbar />
             <Toolbar />
 
@@ -420,7 +360,7 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
 
                         {/* Article Content */}
                         <Card sx={{ p: { xs: 3, md: 5 }, bgcolor: "white", borderRadius: 2, mb: 4 }}>
-                            {post.content.map((section, index) => (
+                            {post.content?.map((section: any, index: number) => (
                                 <Box key={index} sx={{ mb: 4 }} id={createId(section.heading)}>
                                     <Typography
                                         variant="h4"
@@ -435,7 +375,6 @@ export default function BlogPostPage({ params }: { params: Promise<{ id: string 
                                         {section.heading}
                                     </Typography>
                                     
-                                    {/* Content with optional image */}
                                     <Box
                                         sx={{
                                             display: "flex",

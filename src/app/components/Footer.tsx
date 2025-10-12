@@ -20,7 +20,7 @@ import BoltIcon from "@mui/icons-material/Bolt";
 
 export default function Footer() {
   return (
-    <Box component="footer" sx={{ bgcolor: "#0f2a2a", color: "grey.100", pt: { xs: 6, md: 8 }, pb: { xs: 10, md: 2 } }}>
+    <Box component="footer" sx={{ bgcolor: (theme) => theme.palette.mode === 'dark' ? '#0a0e27' : '#0f2a2a', color: "grey.100", pt: { xs: 6, md: 8 }, pb: { xs: 10, md: 2 } }}>
       <Container maxWidth="lg">
         <Grid container spacing={4} alignItems="flex-start">
           {/* Left column */}
