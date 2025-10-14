@@ -4,10 +4,11 @@ import Image from "next/image";
 import { Box, Typography, Container, Button } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
+import { motion } from "framer-motion"; // ✅ Add this
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Banner_1 from "../../../public/profile.png";
 import Banner_2 from "../../../public/human.png";
 
@@ -34,7 +35,7 @@ export default function BannerCarousel() {
         pagination={{ clickable: true }}
         style={{ width: "100%", height: "100%" }}
       >
-        {slides.map((slide) => (
+        {slides.map((slide, slideIndex) => (
           <SwiperSlide key={slide.id}>
             <Box
               sx={{
@@ -44,9 +45,9 @@ export default function BannerCarousel() {
                 borderRadius: { xs: 0, md: 2 },
                 overflow: "hidden",
                 background: (theme) => 
-      theme.palette.mode === 'dark'
-        ? 'linear-gradient(135deg, #4c5fd5 0%, #3d4ea8 50%, #1a3050 100%)'
-        : 'linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)',
+                  theme.palette.mode === 'dark'
+                    ? 'linear-gradient(135deg, #4c5fd5 0%, #3d4ea8 50%, #1a3050 100%)'
+                    : 'linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)',
               }}
             >
               <Container
@@ -66,8 +67,12 @@ export default function BannerCarousel() {
                     gap: { xs: 4, md: 6 },
                   }}
                 >
-                  {/* Left Content */}
+                  {/* Left Content - Animated */}
                   <Box
+                    component={motion.div}
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.8, delay: slideIndex * 0.2 }}
                     sx={{
                       flex: 1,
                       color: "white",
@@ -76,6 +81,10 @@ export default function BannerCarousel() {
                   >
                     {/* Badge */}
                     <Box
+                      component={motion.div}
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.3 }}
                       sx={{
                         display: "inline-block",
                         bgcolor: "rgba(255,255,255,0.2)",
@@ -100,7 +109,10 @@ export default function BannerCarousel() {
 
                     {/* Main Heading */}
                     <Typography
-                      component="h1"
+                      component={motion.h1}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.4 }}
                       sx={{
                         fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
                         fontWeight: 800,
@@ -115,6 +127,10 @@ export default function BannerCarousel() {
 
                     {/* Subtitle */}
                     <Typography
+                      component={motion.p}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.5 }}
                       sx={{
                         fontSize: { xs: "1rem", md: "1.25rem" },
                         fontWeight: 500,
@@ -127,8 +143,19 @@ export default function BannerCarousel() {
                       Transform your Yoga Passion into Profession
                     </Typography>
 
-                    {/* Highlights */}
+                    {/* Highlights - Stagger animation */}
                     <Box
+                      component={motion.div}
+                      initial="hidden"
+                      animate="visible"
+                      variants={{
+                        visible: {
+                          transition: {
+                            staggerChildren: 0.1,
+                            delayChildren: 0.6
+                          }
+                        }
+                      }}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -140,6 +167,11 @@ export default function BannerCarousel() {
                       {highlights.map((highlight, index) => (
                         <Box
                           key={index}
+                          component={motion.div}
+                          variants={{
+                            hidden: { opacity: 0, x: -20 },
+                            visible: { opacity: 1, x: 0 }
+                          }}
                           sx={{
                             display: "flex",
                             alignItems: "center",
@@ -167,6 +199,12 @@ export default function BannerCarousel() {
 
                     {/* CTA Button */}
                     <Button
+                      component={motion.button}
+                      whileHover={{ scale: 1.05, y: -2 }}
+                      whileTap={{ scale: 0.98 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.9 }}
                       variant="contained"
                       size="large"
                       sx={{
@@ -179,20 +217,18 @@ export default function BannerCarousel() {
                         borderRadius: 2,
                         textTransform: "none",
                         boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
-                        "&:hover": {
-                          bgcolor: "#fafafa",
-                          transform: "translateY(-2px)",
-                          boxShadow: "0 12px 32px rgba(0,0,0,0.3)",
-                        },
-                        transition: "all 0.3s ease",
                       }}
                     >
                       Start Your Journey →
                     </Button>
                   </Box>
 
-                  {/* Right Content - Image (Circular) */}
+                  {/* Right Content - Image (Animated) */}
                   <Box
+                    component={motion.div}
+                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ duration: 0.8, delay: 0.4 }}
                     sx={{
                       flex: { xs: "none", md: 1 },
                       width: { xs: "100%", sm: "80%", md: "auto" },

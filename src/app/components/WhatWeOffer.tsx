@@ -9,7 +9,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
 import Image from "next/image";
-
+import { motion } from "framer-motion";
 import ornament from "../../../public/Logo3.png";
 
 /** inline SVG icons */
@@ -62,7 +62,7 @@ const items = [
 export default function WhatWeOffer() {
     return (
         <Box component="section" sx={{ py: { xs: 6, md: 8 }, bgcolor: "background.paper" }}>
-            <Container maxWidth="xl">
+            <Container maxWidth="lg">
                 {/* Header */}
                 <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
                     <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
@@ -85,7 +85,7 @@ export default function WhatWeOffer() {
                 {/* Cards grid (Grid2: using `size` on children) */}
                 <Box sx={{ mt: { xs: 3, md: 4 } }}>
                     <Grid container spacing={{ xs: 2, md: 3 }} alignItems="stretch"> {/* ensure children stretch */}
-                        {items.map((it) => {
+                        {items.map((it, index) => {
                             const Icon = it.icon;
                             return (
                                 <Grid
@@ -97,30 +97,29 @@ export default function WhatWeOffer() {
 
                                 >
                                     <Card
+                                        component={motion.div}
+                                        initial={{ opacity: 0, y: 30 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: "-50px" }}
+                                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                                        whileHover={{
+                                            y: -6,
+                                            boxShadow: "0 20px 36px rgba(0,0,0,0.14)",
+                                            transition: { duration: 0.25 }
+                                        }}
                                         elevation={2}
                                         sx={{
                                             position: "relative",
                                             borderRadius: 1.25,
                                             border: "1px dotted",
-                                            borderColor: 'divider', // ✅ Use theme divider color
-                                            backgroundColor: 'background.paper', // ✅ Use theme paper color
+                                            borderColor: 'divider',
+                                            backgroundColor: 'background.paper',
                                             display: "flex",
                                             flexDirection: "column",
                                             flex: 1,
                                             p: { xs: 2, md: 3 },
                                             overflow: "visible",
-                                            transition: "transform .25s ease, box-shadow .25s ease",
-                                            "&:hover": {
-                                                transform: "translateY(-6px)",
-                                                boxShadow: "0 20px 36px rgba(0,0,0,0.14)",
-                                            },
-                                            "&:hover .corner-badge": {
-                                                bgcolor: (theme) => theme.palette.mode === 'dark' ? '#c44a1e' : '#8b2b10', // ✅ Theme-aware
-                                            },
-                                            "&:hover .corner-badge .corner-icon": {
-                                                transform: "scale(1.08) rotate(12deg)",
-                                                transition: "transform .28s cubic-bezier(.2,.9,.3,1)",
-                                            },
+                                            cursor: "pointer",
                                         }}
                                     >
                                         {/* corner badge */}

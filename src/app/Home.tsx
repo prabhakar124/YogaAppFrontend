@@ -17,6 +17,7 @@ import TrainerInfo from "./components/Trainer&InstituteInfo";
 import WhatWeOffer from "./components/WhatWeOffer";
 import TestimonialSection from "./components/TestimonialSection";
 import Footer from "./components/Footer";
+import PageTransition from "./components/PageTransition";
 
 export default function Home() {
     const { user, loading } = useAuth();
@@ -35,6 +36,7 @@ export default function Home() {
     }, [loading, user]);
 
     return (
+        <PageTransition>
         <Box sx={{ minHeight: '100vh' }}>
             <Navbar />
             <Toolbar />
@@ -121,5 +123,6 @@ export default function Home() {
             <TestimonialSection />
             <Footer />
         </Box>
+        </PageTransition>
     );
 }

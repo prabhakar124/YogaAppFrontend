@@ -1,7 +1,7 @@
-// TrainerInfo.tsx (corrected)
+// TrainerInfo.tsx (with animations)
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid"; // <- Grid2
+import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -16,6 +16,7 @@ import svg1 from "../../../public/svg1.svg";
 import svg2 from "../../../public/svg2.svg";
 import svg3 from "../../../public/svg3.svg";
 import svg4 from "../../../public/svg4.svg";
+import { motion } from "framer-motion";
 
 const items = [
   {
@@ -80,10 +81,24 @@ export default function TrainerInfo() {
     <>
       {/* ABOUT HERO */}
       <Box component="section" sx={{ py: { xs: 6, md: 5 }, bgcolor: "background.paper" }}>
-        <Container maxWidth="xl">
-          {/* Header */}
-          <Box sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}>
-            <Box sx={{ mb: 2, display: "flex", justifyContent: "center" }}>
+        <Container maxWidth="lg">
+          {/* Header with animation */}
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}
+          >
+            <Box
+              component={motion.div}
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              sx={{ mb: 2, display: "flex", justifyContent: "center" }}
+            >
               <Image src={logo} alt="Logo" width={70} height={70} />
             </Box>
 
@@ -115,13 +130,18 @@ export default function TrainerInfo() {
             />
           </Box>
 
-          {/* Content grid */}
+          {/* Content grid with animations */}
           <Grid container spacing={4} alignItems="center">
             {/* Left: text */}
             <Grid size={{ xs: 12, md: 8 }}>
-              <Box sx={{ pr: { md: 5 } }}>
-                {/* IMPORTANT: the small decorative box inside the paragraph must render inline.
-                    We use component="span" for both Boxes to avoid <div> inside <p>. */}
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, x: -50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                sx={{ pr: { md: 5 } }}
+              >
                 <Typography
                   sx={{
                     fontSize: "1rem",
@@ -167,14 +187,21 @@ export default function TrainerInfo() {
                       }}
                     />
                   </Box>
-                  As we bring our services to Jaipur, we’re eager to blend the city’s royal heritage with our innovative yoga training programs. Known as the Pink City, Jaipur offers a rich cultural backdrop ideal for a transformative yoga journey. Our mission is to enhance the way our students experience yoga teacher training, combining Jaipur's historical splendor with state-of-the-art technology.
+                  As we bring our services to Jaipur, we're eager to blend the city's royal heritage with our innovative yoga training programs. Known as the Pink City, Jaipur offers a rich cultural backdrop ideal for a transformative yoga journey. Our mission is to enhance the way our students experience yoga teacher training, combining Jaipur's historical splendor with state-of-the-art technology.
                 </Typography>
               </Box>
             </Grid>
 
             {/* Right: image */}
             <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ display: "flex", justifyContent: { xs: "center", md: "flex-end" }, alignItems: "center" }}>
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, x: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, x: 0, scale: 1 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                sx={{ display: "flex", justifyContent: { xs: "center", md: "flex-end" }, alignItems: "center" }}
+              >
                 <Box
                   sx={{
                     width: { xs: 320, sm: 380, md: 460 },
@@ -199,77 +226,91 @@ export default function TrainerInfo() {
         </Container>
       </Box>
 
-      {/* Responsive gradient cards row */}
-    {/* Responsive gradient cards row */}
-<Box
-  component="section"
-  sx={{
-    py: { xs: 4, md: 8 },
-    bgcolor: 'transparent',
-    px: { xs: 2, sm: 3, md: 12 },
-  }}
->
-  <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
-    {items.map((it) => (
-      <Grid key={it.id} size={{ xs: 12, sm: 6, md: 3 }}>
-        <Card
-          elevation={6}
-          sx={{
-            height: "100%",
-            minHeight: { xs: 160, md: 200 },
-            borderRadius: 2,
-            // ✅ Change from hardcoded gradient to theme-aware gradient
-            background: (theme) => 
-              theme.palette.mode === 'dark'
-                ? 'linear-gradient(180deg, rgba(139, 159, 238, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)'
-                : 'linear-gradient(180deg, rgba(63, 91, 107, 0.98) 0%, rgba(91, 115, 178, 0.95) 100%)',
-            color: "common.white", // ✅ Keep white text in both modes
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            p: { xs: 2, md: 3 },
-            overflow: "visible",
-            transition: "transform .22s ease, box-shadow .22s ease",
-            "&:hover": {
-              transform: "translateY(-8px)",
-              boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
-            },
-          }}
-        >
-          <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1 }}>
-            <Avatar
-              sx={{
-                bgcolor: "white",
-                color: "primary.main", // ✅ Use theme color
-                width: { xs: 56, md: 72 },
-                height: { xs: 56, md: 72 },
-                boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
-                fontSize: { xs: 22, md: 30 },
-              }}
-            >
-              {it.icon}
-            </Avatar>
+      {/* Gradient cards with animations */}
+      <Box
+        component="section"
+        sx={{
+          py: { xs: 4, md: 8 },
+          bgcolor: 'transparent',
+          px: { xs: 2, sm: 3, md: 12 },
+        }}
+      >
+        <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+          {items.map((it, index) => (
+            <Grid key={it.id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Card
+                component={motion.div}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                elevation={6}
+                sx={{
+                  height: "100%",
+                  minHeight: { xs: 160, md: 200 },
+                  borderRadius: 2,
+                  background: (theme) => 
+                    theme.palette.mode === 'dark'
+                      ? 'linear-gradient(180deg, rgba(139, 159, 238, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)'
+                      : 'linear-gradient(180deg, rgba(63, 91, 107, 0.98) 0%, rgba(91, 115, 178, 0.95) 100%)',
+                  color: "common.white",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  p: { xs: 2, md: 3 },
+                  overflow: "visible",
+                  cursor: "pointer",
+                }}
+              >
+                <CardContent sx={{ p: 0, display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 1 }}>
+                  <Avatar
+                    sx={{
+                      bgcolor: "white",
+                      color: "primary.main",
+                      width: { xs: 56, md: 72 },
+                      height: { xs: 56, md: 72 },
+                      boxShadow: "0 6px 18px rgba(0,0,0,0.12)",
+                      fontSize: { xs: 22, md: 30 },
+                    }}
+                  >
+                    {it.icon}
+                  </Avatar>
 
-            <Typography variant="h6" component="h3" sx={{ fontWeight: 700, letterSpacing: "-0.02em", fontSize: { xs: "0.95rem", md: "1.15rem" }, color: "#fff", mt: 0.5 }}>
-              {it.title}
-            </Typography>
+                  <Typography variant="h6" component="h3" sx={{ fontWeight: 700, letterSpacing: "-0.02em", fontSize: { xs: "0.95rem", md: "1.15rem" }, color: "#fff", mt: 0.5 }}>
+                    {it.title}
+                  </Typography>
 
-            <Typography sx={{ mt: 0.5, fontSize: { xs: "0.8rem", md: "0.95rem" }, color: "rgba(255,255,255,0.92)", fontWeight: 400, maxWidth: { xs: 260, sm: 320, md: "none" } }}>
-              {it.subtitle}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    ))}
-  </Grid>
-</Box>
+                  <Typography sx={{ mt: 0.5, fontSize: { xs: "0.8rem", md: "0.95rem" }, color: "rgba(255,255,255,0.92)", fontWeight: 400, maxWidth: { xs: 260, sm: 320, md: "none" } }}>
+                    {it.subtitle}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
 
-      {/* Feature list two-column cards */}
+      {/* Why Choose section with animations */}
       <Box component="section" sx={{ py: { xs: 6, md: 4 }, bgcolor: "background.paper" }}>
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           {/* Header */}
-          <Box sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}>
-            <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0, y: -30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            sx={{ textAlign: "center", mb: { xs: 3, md: 6 } }}
+          >
+            <Box
+              component={motion.div}
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              sx={{ display: "flex", justifyContent: "center", mb: 2 }}
+            >
               <Image src={logo1} alt="brand" width={72} height={48} />
             </Box>
 
@@ -277,7 +318,6 @@ export default function TrainerInfo() {
               Why Choose YogKulam in Jaipur
             </Typography>
 
-            {/* Changed to component="div" to avoid nested block elements inside <p> */}
             <Typography
               component="div"
               sx={{ fontSize: { xs: "0.9rem", md: "1rem" }, color: "text.secondary", maxWidth: 920, mx: "auto", mb: 2, lineHeight: 1.6 }}
@@ -288,12 +328,21 @@ export default function TrainerInfo() {
             <Divider sx={{ width: 140, height: 2, bgcolor: "text.secondary", mx: "auto", opacity: 0.6 }} />
           </Box>
 
-          {/* Cards grid (two-column on md, one on xs) */}
+          {/* Cards grid with stagger animation */}
           <Box sx={{ mt: { xs: 3, md: 6 } }}>
             <Grid container spacing={3}>
-              {items2.map((it) => (
+              {items2.map((it, index) => (
                 <Grid key={it.id} size={{ xs: 12, md: 6 }}>
-                  <Card elevation={0} sx={{ border: "1px solid", borderColor: "divider", borderRadius: 1.5, backgroundColor: "common.white", p: { xs: 2, md: 3 } }}>
+                  <Card
+                    component={motion.div}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ duration: 0.5, delay: index * 0.15 }}
+                    whileHover={{ y: -4, boxShadow: "0 8px 24px rgba(0,0,0,0.12)", transition: { duration: 0.3 } }}
+                    elevation={0}
+                    sx={{ border: "1px solid", borderColor: "divider", borderRadius: 1.5, backgroundColor: "background.paper", p: { xs: 2, md: 3 }, cursor: "pointer" }}
+                  >
                     <CardContent sx={{ p: 0 }}>
                       <Box sx={{ display: "flex", gap: 3, alignItems: "flex-start" }}>
                         <Box sx={{ minWidth: 82, display: "flex", alignItems: "center", justifyContent: "center" }}>

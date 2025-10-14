@@ -24,7 +24,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import { motion } from "framer-motion";
 // ✅ Import Redux hooks and actions
 import { useAppSelector, useAppDispatch } from "../store/hooks";
 import {
@@ -33,6 +33,7 @@ import {
   setSortBy,
   setSearchQuery,
 } from "../store/slices/blogSlice";
+import PageTransition from "../components/PageTransition";
 
 const categories = ["All Blogs", "YTT", "Disease Cure", "Asanas", "Pranayam", "Philosophy", "Meditation"];
 
@@ -95,6 +96,7 @@ export default function BlogPage() {
   };
 
   return (
+    <PageTransition>
     <Box sx={{ minHeight: "100vh" }}>
       <Navbar />
       <Toolbar />
@@ -207,7 +209,7 @@ export default function BlogPage() {
             sx={{
               flex: 1,
               minWidth: 250,
-              bgcolor: "white",
+              bgcolor: "background.paper",
               borderRadius: 2,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 2,
@@ -281,21 +283,26 @@ export default function BlogPage() {
               </Box>
             ) : (
               <Grid container spacing={3}>
-                {filteredPosts.map((post) => (
+                {filteredPosts.map((post,index) => (
                   <Grid size={{ xs: 12 }} key={post.id}>
                     <Card
+                      component={motion.div}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      whileHover={{
+                        y: -4,
+                        boxShadow: "0 12px 24px rgba(0,0,0,0.1)",
+                        transition: { duration: 0.3 }
+                      }}
                       sx={{
                         display: "flex",
                         flexDirection: { xs: "column", md: "row" },
-                        bgcolor: "white",
+                        bgcolor: "background.paper",
                         borderRadius: 2,
                         overflow: "hidden",
-                        transition: "all 0.3s ease",
                         cursor: "pointer",
-                        "&:hover": {
-                          transform: "translateY(-4px)",
-                          boxShadow: "0 12px 24px rgba(0,0,0,0.1)",
-                        },
                       }}
                       onClick={() => handleBlogClick(post.slug)}
                     >
@@ -337,6 +344,7 @@ export default function BlogPage() {
                             mb: 1.5,
                             fontSize: { xs: "1.25rem", md: "1.5rem" },
                             lineHeight: 1.3,
+                            color: "text.primary"
                           }}
                         >
                           {post.title}
@@ -379,7 +387,7 @@ export default function BlogPage() {
                         {/* Table of Contents Preview */}
                         <Box
                           sx={{
-                            bgcolor: "#f8f9fa",
+                            bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.05)' : '#f8f9fa', // ✅ Theme-aware
                             p: 2,
                             borderRadius: 1.5,
                             mb: 2,
@@ -393,6 +401,7 @@ export default function BlogPage() {
                               display: "flex",
                               alignItems: "center",
                               gap: 1,
+                              color: "text.primary",
                             }}
                           >
                             📋 Table of Contents:
@@ -442,5 +451,6 @@ export default function BlogPage() {
 
       <Footer />
     </Box>
+    </PageTransition>
   );
 }

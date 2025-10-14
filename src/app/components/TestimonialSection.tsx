@@ -19,6 +19,7 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import { motion } from "framer-motion"; // ✅ Add
 
 /**
  * TestimonialSection
@@ -100,7 +101,7 @@ export default function TestimonialSection(): JSX.Element {
 
   return (
     <Box component="section" sx={{ py: { xs: 6, md: 10 }, bgcolor: "background.paper" }}>
-      <Container maxWidth="xl">
+      <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ textAlign: "center", mb: { xs: 3, md: 5 } }}>
           <Typography
@@ -170,9 +171,15 @@ export default function TestimonialSection(): JSX.Element {
                     {/* slide content: grid with up to 3 testimonials */}
                     <Box sx={{ width: "100%", py: { xs: 1, md: 2 } }}>
                       <Grid container spacing={3}>
-                        {group.map((t) => (
+                        {group.map((t, index) => (
                           <Grid key={t.id} size={{ xs: 12, sm: 6, md: 4 }}>
                             <Card
+                              component={motion.div}
+                              initial={{ opacity: 0, scale: 0.9 }}
+                              whileInView={{ opacity: 1, scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.5, delay: index * 0.1 }}
+                              whileHover={{ y: -5, transition: { duration: 0.2 } }}
                               elevation={0}
                               sx={{
                                 height: "100%",
@@ -277,6 +284,6 @@ export default function TestimonialSection(): JSX.Element {
           </Grid>
         </Grid>
       </Container>
-    </Box>
+    </Box >
   );
 }
