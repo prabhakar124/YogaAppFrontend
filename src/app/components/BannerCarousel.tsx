@@ -4,11 +4,22 @@ import Image from "next/image";
 import { Box, Typography, Container, Button } from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
-import { motion } from "framer-motion"; // ✅ Add this
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+
+// Import reusable utilities
+import MotionBox from "./Motion/MotionBox";
+import { 
+  spacing, 
+  borderRadius, 
+  gradients, 
+  typography,
+  buttonStyles,
+  mergeSx
+} from "../styles/sharedStyles";
+
 import Banner_1 from "../../../public/profile.png";
 import Banner_2 from "../../../public/human.png";
 
@@ -42,12 +53,9 @@ export default function BannerCarousel() {
                 position: "relative",
                 width: "100%",
                 minHeight: { xs: "auto", sm: 450, md: 550 },
-                borderRadius: { xs: 0, md: 2 },
+                borderRadius: { xs: 0, md: borderRadius.medium },
                 overflow: "hidden",
-                background: (theme) => 
-                  theme.palette.mode === 'dark'
-                    ? 'linear-gradient(135deg, #4c5fd5 0%, #3d4ea8 50%, #1a3050 100%)'
-                    : 'linear-gradient(135deg, #5e95ccff 0%, #255aa8ff 50%, #18743fff 100%)',
+                background: gradients.banner,
               }}
             >
               <Container
@@ -67,12 +75,10 @@ export default function BannerCarousel() {
                     gap: { xs: 4, md: 6 },
                   }}
                 >
-                  {/* Left Content - Animated */}
-                  <Box
-                    component={motion.div}
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.8, delay: slideIndex * 0.2 }}
+                  {/* Left Content */}
+                  <MotionBox
+                    animation="fadeInLeft"
+                    delay={slideIndex * 0.2}
                     sx={{
                       flex: 1,
                       color: "white",
@@ -80,11 +86,9 @@ export default function BannerCarousel() {
                     }}
                   >
                     {/* Badge */}
-                    <Box
-                      component={motion.div}
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.5, delay: 0.3 }}
+                    <MotionBox
+                      animation="scaleIn"
+                      delay={0.3}
                       sx={{
                         display: "inline-block",
                         bgcolor: "rgba(255,255,255,0.2)",
@@ -105,57 +109,44 @@ export default function BannerCarousel() {
                       >
                         SINCE 2012
                       </Typography>
-                    </Box>
+                    </MotionBox>
 
                     {/* Main Heading */}
-                    <Typography
-                      component={motion.h1}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.4 }}
-                      sx={{
-                        fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
-                        fontWeight: 800,
-                        lineHeight: 1.1,
-                        color: "white",
-                        mb: 2,
-                        textShadow: "0 2px 20px rgba(0,0,0,0.2)",
-                      }}
-                    >
-                      Best Yoga Training Institute In Jaipur
-                    </Typography>
+                    <MotionBox animation="fadeInUp" delay={0.4}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: "2rem", sm: "2.5rem", md: "3.5rem" },
+                          fontWeight: 800,
+                          lineHeight: 1.1,
+                          color: "white",
+                          mb: 2,
+                          textShadow: "0 2px 20px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        Best Yoga Training Institute In Jaipur
+                      </Typography>
+                    </MotionBox>
 
                     {/* Subtitle */}
-                    <Typography
-                      component={motion.p}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.5 }}
-                      sx={{
-                        fontSize: { xs: "1rem", md: "1.25rem" },
-                        fontWeight: 500,
-                        color: "rgba(255,255,255,0.95)",
-                        mb: 4,
-                        maxWidth: 600,
-                        mx: { xs: "auto", md: 0 },
-                      }}
-                    >
-                      Transform your Yoga Passion into Profession
-                    </Typography>
+                    <MotionBox animation="fadeInUp" delay={0.5}>
+                      <Typography
+                        sx={{
+                          fontSize: { xs: "1rem", md: "1.25rem" },
+                          fontWeight: 500,
+                          color: "rgba(255,255,255,0.95)",
+                          mb: 4,
+                          maxWidth: 600,
+                          mx: { xs: "auto", md: 0 },
+                        }}
+                      >
+                        Transform your Yoga Passion into Profession
+                      </Typography>
+                    </MotionBox>
 
-                    {/* Highlights - Stagger animation */}
-                    <Box
-                      component={motion.div}
-                      initial="hidden"
-                      animate="visible"
-                      variants={{
-                        visible: {
-                          transition: {
-                            staggerChildren: 0.1,
-                            delayChildren: 0.6
-                          }
-                        }
-                      }}
+                    {/* Highlights */}
+                    <MotionBox
+                      animation="staggerContainer"
+                      viewport={false}
                       sx={{
                         display: "flex",
                         flexDirection: "column",
@@ -165,13 +156,9 @@ export default function BannerCarousel() {
                       }}
                     >
                       {highlights.map((highlight, index) => (
-                        <Box
+                        <MotionBox
                           key={index}
-                          component={motion.div}
-                          variants={{
-                            hidden: { opacity: 0, x: -20 },
-                            visible: { opacity: 1, x: 0 }
-                          }}
+                          animation="staggerItem"
                           sx={{
                             display: "flex",
                             alignItems: "center",
@@ -193,42 +180,40 @@ export default function BannerCarousel() {
                           >
                             {highlight}
                           </Typography>
-                        </Box>
+                        </MotionBox>
                       ))}
-                    </Box>
+                    </MotionBox>
 
                     {/* CTA Button */}
-                    <Button
-                      component={motion.button}
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6, delay: 0.9 }}
-                      variant="contained"
-                      size="large"
-                      sx={{
-                        bgcolor: "white",
-                        color: "#255aa8ff",
-                        px: 4,
-                        py: 1.5,
-                        fontSize: "1rem",
-                        fontWeight: 700,
-                        borderRadius: 2,
-                        textTransform: "none",
-                        boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
-                      }}
+                    <MotionBox
+                      animation="fadeInUp"
+                      delay={0.9}
+                      hover="scale"
                     >
-                      Start Your Journey →
-                    </Button>
-                  </Box>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          bgcolor: "white",
+                          color: "#255aa8ff",
+                          px: 4,
+                          py: 1.5,
+                          fontSize: "1rem",
+                          fontWeight: 700,
+                          borderRadius: borderRadius.medium,
+                          textTransform: "none",
+                          boxShadow: "0 8px 24px rgba(0,0,0,0.2)",
+                        }}
+                      >
+                        Start Your Journey →
+                      </Button>
+                    </MotionBox>
+                  </MotionBox>
 
-                  {/* Right Content - Image (Animated) */}
-                  <Box
-                    component={motion.div}
-                    initial={{ opacity: 0, scale: 0.8, rotate: -10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
+                  {/* Right Content - Image */}
+                  <MotionBox
+                    animation="scaleIn"
+                    delay={0.4}
                     sx={{
                       flex: { xs: "none", md: 1 },
                       width: { xs: "100%", sm: "80%", md: "auto" },
@@ -252,14 +237,12 @@ export default function BannerCarousel() {
                         src={slide.src}
                         alt={slide.alt}
                         fill
-                        style={{
-                          objectFit: "cover",
-                        }}
+                        style={{ objectFit: "cover" }}
                         sizes="(max-width: 768px) 80vw, 500px"
                         priority
                       />
                     </Box>
-                  </Box>
+                  </MotionBox>
                 </Box>
               </Container>
 
