@@ -44,7 +44,7 @@ export default function Home() {
             {/* ❌ Remove the AuthModal - let Navbar handle all modals */}
 
             {/* ✅ Show a banner prompt instead of forcing a modal */}
-            {showLoginPrompt && !user && !loading && (
+            {/* {showLoginPrompt && !user && !loading && (
                 <Container maxWidth="lg" sx={{ mt: 2 }}>
                     <Paper
                         elevation={3}
@@ -105,7 +105,7 @@ export default function Home() {
                         </Box>
                     </Paper>
                 </Container>
-            )}
+            )} */}
 
             {/* {user && !loading && (
                 <WelcomeBanner 
