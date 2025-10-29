@@ -255,6 +255,7 @@ export default function Navbar(props: Props) {
                                         variant="outlined"
                                         onClick={() => handleOpenAuth("signin")}
                                         startIcon={<LoginIcon />}
+                                        aria-label="login" 
                                         sx={{
                                             color: 'white',
                                             borderColor: 'white',

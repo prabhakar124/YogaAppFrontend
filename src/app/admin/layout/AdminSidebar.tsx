@@ -1,4 +1,4 @@
-// src/components/admin/layout/AdminSidebar.tsx
+// src/app/admin/layout/AdminSidebar.tsx
 "use client";
 
 import { useState } from 'react';
@@ -75,10 +75,10 @@ export default function AdminSidebar() {
     <aside
       className={`${
         isOpen ? 'w-64' : 'w-20'
-      } bg-gradient-to-b from-indigo-900 to-indigo-800 text-white transition-all duration-300 flex flex-col`}
+      } bg-gradient-to-b from-indigo-900 to-indigo-800 dark:from-gray-900 dark:to-gray-800 text-white transition-all duration-300 flex flex-col`}
     >
       {/* Header */}
-      <div className="p-4 border-b border-indigo-700">
+      <div className="p-4 border-b border-indigo-700 dark:border-gray-700">
         <div className="flex items-center justify-between">
           {isOpen && (
             <Link href="/admin" className="text-xl font-bold">
@@ -87,7 +87,7 @@ export default function AdminSidebar() {
           )}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="p-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-gray-700 transition-colors"
           >
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -106,8 +106,8 @@ export default function AdminSidebar() {
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 isActive
-                  ? 'bg-white text-indigo-900 shadow-lg'
-                  : 'hover:bg-indigo-700'
+                  ? 'bg-white dark:bg-gray-700 text-indigo-900 dark:text-white shadow-lg'
+                  : 'hover:bg-indigo-700 dark:hover:bg-gray-700'
               }`}
             >
               <Icon size={20} />
@@ -118,22 +118,22 @@ export default function AdminSidebar() {
       </nav>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-indigo-700">
+      <div className="p-4 border-t border-indigo-700 dark:border-gray-700">
         <div className={`flex items-center gap-3 ${!isOpen && 'justify-center'}`}>
-          <div className="w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center font-semibold">
+          <div className="w-10 h-10 rounded-full bg-indigo-600 dark:bg-gray-600 flex items-center justify-center font-semibold">
             AD
           </div>
           {isOpen && (
             <div className="flex-1">
               <p className="font-semibold text-sm">Admin User</p>
-              <p className="text-xs text-indigo-300">admin@yoga.com</p>
+              <p className="text-xs text-indigo-300 dark:text-gray-400">admin@yoga.com</p>
             </div>
           )}
         </div>
         {isOpen && (
           <button
             onClick={handleLogout}
-            className="w-full mt-3 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            className="w-full mt-3 flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-indigo-700 dark:hover:bg-gray-700 transition-colors"
           >
             <LogOut size={16} />
             <span className="text-sm">Logout</span>

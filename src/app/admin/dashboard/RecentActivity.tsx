@@ -1,0 +1,184 @@
+// src/app/admin/dashboard/RecentActivity.tsx
+"use client";
+
+import { useEffect, useState } from 'react';
+import { FileText, Star, Image, Users, Clock } from 'lucide-react';
+
+interface Activity {
+  id: string;
+  type: 'blog' | 'review' | 'media' | 'user';
+  title: string;
+  description: string;
+  timestamp: string;
+  user?: string;
+}
+
+export default function RecentActivity() {
+  const [activities, setActivities] = useState<Activity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchRecentActivities();
+  }, []);
+
+  const fetchRecentActivities = async () => {
+    try {
+      const response = await fetch('/api/admin/activities/recent', {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
+        },
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setActivities(data);
+      } else {
+        throw new Error('API not available');
+      }
+    } catch (error) {
+      console.log('Using mock activities');
+      // Use mock data
+      const mockActivities: Activity[] = [
+        {
+          id: '1',
+          type: 'blog',
+          title: 'New blog post published',
+          description: '"Master Guide to Surya Namaskar" by Admin',
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          user: 'Admin',
+        },
+        {
+          id: '2',
+          type: 'review',
+          title: 'New review received',
+          description: '5-star review from John Doe',
+          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          user: 'John Doe',
+        },
+        {
+          id: '3',
+          type: 'media',
+          title: 'Media uploaded',
+          description: '3 new images added to gallery',
+          timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          user: 'Admin',
+        },
+        {
+          id: '4',
+          type: 'user',
+          title: 'New user registered',
+          description: 'Jane Smith joined the platform',
+          timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+          user: 'Jane Smith',
+        },
+        {
+          id: '5',
+          type: 'blog',
+          title: 'Blog post updated',
+          description: '"Pranayama Techniques" was edited',
+          timestamp: new Date(Date.now() - 12 * 60 * 60 * 1000).toISOString(),
+          user: 'Admin',
+        },
+      ];
+      setActivities(mockActivities);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getActivityIcon = (type: Activity['type']) => {
+    switch (type) {
+      case 'blog':
+        return { icon: FileText, color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400' };
+      case 'review':
+        return { icon: Star, color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400' };
+      case 'media':
+        return { icon: Image, color: 'bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400' };
+      case 'user':
+        return { icon: Users, color: 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' };
+      default:
+        return { icon: FileText, color: 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400' };
+    }
+  };
+
+  const getTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const past = new Date(timestamp);
+    const diffInSeconds = Math.floor((now.getTime() - past.getTime()) / 1000);
+
+    if (diffInSeconds < 60) return 'Just now';
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+    return past.toLocaleDateString();
+  };
+
+  if (loading) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-4">Recent Activity</h3>
+        <div className="space-y-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="animate-pulse flex gap-4">
+              <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+              <div className="flex-1 space-y-2">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-100 dark:border-gray-700">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">Recent Activity</h3>
+        <button className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
+          View All
+        </button>
+      </div>
+
+      <div className="space-y-4">
+        {activities.length === 0 ? (
+          <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+            <Clock className="mx-auto mb-2 text-gray-400 dark:text-gray-500" size={32} />
+            <p>No recent activity</p>
+          </div>
+        ) : (
+          activities.map((activity) => {
+            const { icon: Icon, color } = getActivityIcon(activity.type);
+            
+            return (
+              <div
+                key={activity.id}
+                className="flex items-start gap-4 pb-4 border-b border-gray-100 dark:border-gray-700 last:border-0 hover:bg-gray-50 dark:hover:bg-gray-700/50 -mx-2 px-2 py-2 rounded-lg transition-colors"
+              >
+                <div className={`w-12 h-12 ${color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <Icon size={20} />
+                </div>
+                
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-gray-900 dark:text-gray-100 text-sm truncate">
+                    {activity.title}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                    {activity.description}
+                  </p>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Clock size={12} className="text-gray-400 dark:text-gray-500" />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {getTimeAgo(activity.timestamp)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+}

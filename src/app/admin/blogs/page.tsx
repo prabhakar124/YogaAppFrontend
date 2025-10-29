@@ -1,10 +1,11 @@
-// src/app/(admin)/admin/page.tsx
+
 "use client";
 
 import { useEffect, useState } from 'react';
 import { FileText, Users, Star, Eye } from 'lucide-react';
-import StatsCard from './dashboard/StatsCard';
-import RecentActivity from './dashboard/RecentActivity';
+import StatsCard from '../dashboard/StatsCard';
+import RecentActivity from '../dashboard/RecentActivity';
+import { mockAPI } from '@/app/lib/mockAdminData';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -13,23 +14,34 @@ export default function AdminDashboard() {
     pendingReviews: 0,
     totalViews: 0,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch dashboard stats from API
     fetchDashboardStats();
   }, []);
 
   const fetchDashboardStats = async () => {
     try {
+      // Try real API first
       const response = await fetch('/api/admin/dashboard/stats', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
         },
       });
-      const data = await response.json();
-      setStats(data);
+      
+      if (response.ok) {
+        const data = await response.json();
+        setStats(data);
+      } else {
+        throw new Error('API not available');
+      }
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.log('Using mock data (API not available)');
+      // Fall back to mock data
+      const mockStats = await mockAPI.getDashboardStats();
+      setStats(mockStats);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,6 +76,14 @@ export default function AdminDashboard() {
     },
   ];
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       {/* Page Header */}
@@ -87,7 +107,10 @@ export default function AdminDashboard() {
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
           <div className="space-y-3">
-            <button className="w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-left">
+            <button 
+              onClick={() => window.location.href = '/admin/blogs/create'}
+              className="w-full px-4 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-left"
+            >
               + Create New Blog
             </button>
             <button className="w-full px-4 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-lg hover:border-indigo-600 hover:text-indigo-600 transition-colors font-medium text-left">
